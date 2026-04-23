@@ -42,14 +42,14 @@ export function MaterialsPreviewSection() {
                 Материалы для дома
               </span>
               <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-                Отдельный каталог, где материалы можно сразу приобрести
+                Отдельный каталог материалов для покупки
               </h2>
             </div>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
               В каталоге собраны карточки, игры, рабочие тетради и ворклисты.
-              Покупка оформляется в несколько кликов: после оплаты цифровые
-              материалы и чек приходят на e-mail покупателя автоматически.
+              После оплаты цифровой материал и чек приходят на e-mail
+              автоматически.
             </p>
 
             <div className="rounded-2xl border border-accent/30 bg-accent/10 p-5">

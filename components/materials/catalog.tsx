@@ -29,7 +29,7 @@ export function MaterialsCatalog() {
             Магазин материалов
           </span>
           <h1 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Каталог материалов для покупки
+            Каталог материалов
           </h1>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
             Карточки, игры, рабочие тетради и ворклисты в PDF. После оплаты

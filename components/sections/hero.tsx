@@ -94,16 +94,16 @@ export function HeroSection() {
         <div className="relative flex items-end lg:justify-end">
           <div className="relative w-full max-w-xl overflow-hidden rounded-[2.2rem] border border-border/60 bg-card/70 p-7 shadow-[0_30px_90px_rgba(48,39,33,0.16)] backdrop-blur-md">
             <p className="text-xs font-semibold uppercase tracking-[0.22em] text-muted-foreground">
-              Как выстраиваем результат
+              Как строим обучение
             </p>
             <p className="mt-4 font-serif text-3xl leading-tight text-foreground">
-              Ярко для ребёнка и системно для родителя
+              Ребёнку интересно, родителю всё прозрачно
             </p>
             <div className="mt-7 space-y-4">
               {[
-                "Программа по CEFR + Cambridge Young Learners",
-                "Регулярные тесты, контрольные и отчётная статистика",
-                "Форматы: очно, онлайн, индивидуально, в паре, в мини-группе",
+                "Уровневая программа по CEFR и Cambridge Young Learners",
+                "Промежуточные срезы и понятные отчёты для родителей",
+                "Форматы: очно, онлайн, индивидуально, в паре и в мини-группе",
                 `Старт обучения: ${brand.minAge}`,
               ].map((item) => (
                 <div key={item} className="flex items-start gap-3">
@@ -118,7 +118,7 @@ export function HeroSection() {
                 Фокус на старте
               </p>
               <p className="mt-2 text-base text-foreground">
-                Бесплатное пробное занятие и подбор программы под ребёнка.
+                Бесплатное пробное занятие и аккуратный подбор программы под ребёнка.
               </p>
             </div>
           </div>

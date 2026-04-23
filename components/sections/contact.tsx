@@ -46,11 +46,11 @@ export function ContactSection() {
                 Запись и контакты
               </span>
               <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight text-balance">
-                Основная цель на старте — заявки на пробное занятие
+                Запишитесь на бесплатное пробное занятие
               </h2>
               <p className="mt-6 text-lg text-primary-foreground/80 leading-relaxed">
-                Оставьте данные родителя и ребёнка. Мы свяжемся с вами, уточним
-                формат и предложим ближайшее удобное время.
+                Оставьте данные родителя и ребёнка. Мы свяжемся с вами,
+                подберём формат и предложим удобное время.
               </p>
             </div>
 

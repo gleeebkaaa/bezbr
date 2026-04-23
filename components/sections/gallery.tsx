@@ -37,22 +37,88 @@ const galleryImages = [
 
 const lessonVideos = [
   {
-    src: "/media/video/presentation-lesson.mp4",
-    poster: "/media/video/presentation-lesson-poster.webp",
-    title: "Видео: мини-презентация на английском",
-    description: "Фрагмент занятия, где ребёнок выступает и отвечает на вопросы.",
+    src: "/media/video/lesson-intro.mp4",
+    poster: "/media/video/lesson-intro-poster.jpg",
+    title: "Видео: знакомство с темой урока",
+    description: "Спокойный вход в урок и включение ребёнка в английскую речь.",
   },
   {
-    src: "/media/video/game-lesson.mp4",
-    poster: "/media/video/game-lesson-poster.webp",
-    title: "Видео: игровой формат",
-    description: "Практика словаря через игровой сценарий и живую коммуникацию.",
+    src: "/media/video/lesson-dialogue.mp4",
+    poster: "/media/video/lesson-dialogue-poster.jpg",
+    title: "Видео: диалоговая практика",
+    description: "Ребёнок отвечает на вопросы и учится поддерживать разговор.",
   },
   {
-    src: "/media/video/materials-lesson.mp4",
-    poster: "/media/video/materials-lesson-poster.webp",
-    title: "Видео: работа с материалами",
-    description: "Рабочие листы и карточки в формате, который удерживает внимание ребёнка.",
+    src: "/media/video/lesson-activity.mp4",
+    poster: "/media/video/lesson-activity-poster.jpg",
+    title: "Видео: активная работа в классе",
+    description: "Наглядные задания, движение и живая отработка новых слов.",
+  },
+  {
+    src: "/media/video/lesson-engagement.mp4",
+    poster: "/media/video/lesson-engagement-poster.jpg",
+    title: "Видео: вовлечение в коммуникацию",
+    description: "Практика речи в формате, где ребёнок не боится ошибиться.",
+  },
+  {
+    src: "/media/video/lesson-cards.mp4",
+    poster: "/media/video/lesson-cards-poster.jpg",
+    title: "Видео: работа с карточками",
+    description: "Карточки помогают быстро закреплять лексику и фразы.",
+  },
+  {
+    src: "/media/video/lesson-presentation.mp4",
+    poster: "/media/video/lesson-presentation-poster.jpg",
+    title: "Видео: мини-выступление",
+    description: "Ребёнок формулирует мысль на английском и говорит увереннее.",
+  },
+  {
+    src: "/media/video/lesson-practice.mp4",
+    poster: "/media/video/lesson-practice-poster.jpg",
+    title: "Видео: речевая практика",
+    description: "Отработка темы урока в живом взаимодействии с преподавателем.",
+  },
+  {
+    src: "/media/video/lesson-project.mp4",
+    poster: "/media/video/lesson-project-poster.jpg",
+    title: "Видео: проектный формат",
+    description: "Развиваем речь, самостоятельность и навык самопрезентации.",
+  },
+  {
+    src: "/media/video/lesson-teamwork.mp4",
+    poster: "/media/video/lesson-teamwork-poster.jpg",
+    title: "Видео: командная работа",
+    description: "Дети взаимодействуют на английском и учатся договариваться.",
+  },
+  {
+    src: "/media/video/lesson-reading.mp4",
+    poster: "/media/video/lesson-reading-poster.jpg",
+    title: "Видео: чтение и понимание",
+    description: "Закрепляем чтение и понимание текста в поддерживающем темпе.",
+  },
+  {
+    src: "/media/video/lesson-structure.mp4",
+    poster: "/media/video/lesson-structure-poster.jpg",
+    title: "Видео: системная отработка",
+    description: "Пошаговая практика по теме урока с акцентом на речь.",
+  },
+  {
+    src: "/media/video/lesson-focus.mp4",
+    poster: "/media/video/lesson-focus-poster.jpg",
+    title: "Видео: концентрация в уроке",
+    description: "Формат заданий помогает удерживать внимание без перегруза.",
+  },
+  {
+    src: "/media/video/lesson-warmup.mp4",
+    poster: "/media/video/lesson-warmup-poster.jpg",
+    title: "Видео: разогрев перед темой",
+    description: "Короткая вводная активность для плавного старта занятия.",
+  },
+  {
+    src: "/media/video/lesson-quick-task.mp4",
+    poster: "/media/video/lesson-quick-task-poster.jpg",
+    title: "Видео: короткая практическая задача",
+    description: "Быстрая отработка лексики в формате мини-упражнения.",
   },
 ]
 
@@ -65,11 +131,11 @@ export function GallerySection() {
             Пространство мастерской
           </span>
           <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Фото с занятий и рабочего процесса
+            Как проходят занятия в мастерской
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Реальные кадры с занятий: как дети работают с материалами, говорят
-            и закрепляют английский в действии.
+            Реальные кадры с занятий: дети работают с материалами, говорят
+            по-английски и закрепляют новые темы в практике.
           </p>
         </div>
 
@@ -110,7 +176,8 @@ export function GallerySection() {
               Видео с занятий
             </h3>
             <p className="mt-3 text-base text-muted-foreground">
-              Короткие фрагменты реальных уроков. Видео оптимизированы для быстрой загрузки.
+              Короткие фрагменты реальных уроков, чтобы передать атмосферу
+              занятий и формат работы с детьми.
             </p>
           </div>
           <div className="grid gap-6 md:grid-cols-3">

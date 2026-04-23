@@ -25,11 +25,11 @@ export function PricesSection() {
             Стоимость занятий
           </span>
           <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Открытые цены на старте
+            Понятная стоимость и удобный формат оплаты
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Варианты оплаты сразу показаны на главной: разово за занятие или
-            по абонементу на календарный месяц.
+            Можно оплачивать занятия разово или выбрать абонемент на месяц.
+            Вы заранее понимаете бюджет и формат.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ export function PricesSection() {
               Разово
             </p>
             <h3 className="mt-3 font-serif text-3xl font-semibold text-foreground">
-              Оплата за каждое занятие
+              Оплата по занятиям
             </h3>
             <ul className="mt-6 space-y-4">
               {oneTimePrices.map((item) => (
@@ -55,8 +55,8 @@ export function PricesSection() {
               ))}
             </ul>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-              Оплата производится разово за каждое занятие путём предоплаты.
-              Количество занятий меняется в зависимости от календарного месяца.
+              Подходит, если вам важен гибкий график. Оплата вносится за
+              каждое проведённое занятие.
             </p>
           </article>
 
@@ -65,7 +65,7 @@ export function PricesSection() {
               Абонемент
             </p>
             <h3 className="mt-3 font-serif text-3xl font-semibold text-foreground">
-              Фиксированный платёж в месяц
+              Абонемент на месяц
             </h3>
             <ul className="mt-6 space-y-4">
               {monthlyPrices.map((item) => (
@@ -81,8 +81,8 @@ export function PricesSection() {
               ))}
             </ul>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-              Оплата фиксирована за календарный месяц и не меняется в
-              зависимости от количества занятий в этом месяце.
+              Единая стоимость на календарный месяц для выбранного формата
+              обучения.
             </p>
           </article>
         </div>

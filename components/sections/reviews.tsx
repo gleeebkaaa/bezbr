@@ -30,11 +30,11 @@ export function ReviewsSection() {
             Что отмечают родители
           </span>
           <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Что важно родителям после старта
+            Что родители ценят в обучении
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Родители чаще всего отмечают спокойную атмосферу, понятную систему
-            обучения и заметный прогресс ребёнка в речи.
+            Чаще всего родители отмечают спокойную атмосферу, понятную
+            структуру занятий и уверенный прогресс ребёнка.
           </p>
         </div>
         
