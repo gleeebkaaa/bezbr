@@ -9,6 +9,10 @@ export const metadata: Metadata = {
   title: `Оплата прошла успешно — ${brand.fullName}`,
   description:
     "Подтверждение оплаты материалов и информация о получении файлов на e-mail.",
+  robots: {
+    index: false,
+    follow: false,
+  },
 }
 
 export default function PaymentSuccessPage() {

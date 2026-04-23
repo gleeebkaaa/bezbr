@@ -10,10 +10,15 @@ import { GallerySection } from "@/components/sections/gallery"
 import { FAQSection } from "@/components/sections/faq"
 import { ContactSection } from "@/components/sections/contact"
 import { Footer } from "@/components/footer"
+import { JsonLd } from "@/components/seo/json-ld"
+import { getHomeStructuredData } from "@/lib/structured-data"
 
 export default function HomePage() {
+  const homeStructuredData = getHomeStructuredData()
+
   return (
     <>
+      <JsonLd data={homeStructuredData} />
       <Header />
       <main>
         <HeroSection />

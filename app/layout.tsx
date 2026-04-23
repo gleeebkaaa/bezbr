@@ -3,6 +3,7 @@ import { Cormorant_Garamond, Manrope } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { brand } from '@/lib/brand'
+import { site } from '@/lib/site'
 
 const cormorant = Cormorant_Garamond({ 
   subsets: ["latin", "cyrillic"],
@@ -16,9 +17,15 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: `${brand.fullName} — детская языковая мастерская в Москве`,
-  description:
-    "Очно и онлайн: английский для детей от 3,5 лет в формате, где есть система, бережная атмосфера и прозрачный результат для родителей.",
+  metadataBase: new URL(site.url),
+  title: {
+    default: `${brand.fullName} — детская языковая мастерская в Москве`,
+    template: `%s | ${brand.fullName}`,
+  },
+  description: site.description,
+  alternates: {
+    canonical: '/',
+  },
   keywords:
     "английский для детей москва, курсы английского для детей, языковая мастерская, пробное занятие английский, английский от 3.5 лет",
   icons: {
@@ -42,8 +49,31 @@ export const metadata: Metadata = {
     title: `${brand.fullName} — английский для детей в Москве`,
     description:
       "Английский через коммуникацию, игру и движение. Система уровней CEFR и регулярная статистика прогресса для родителей.",
+    url: site.url,
+    siteName: brand.fullName,
     locale: 'ru_RU',
     type: 'website',
+    images: [
+      {
+        url: '/media/branding/logo-main.jpg',
+        width: 1264,
+        height: 647,
+        alt: brand.fullName,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: `${brand.fullName} — английский для детей в Москве`,
+    description:
+      "Английский через коммуникацию, игру и движение. Система уровней CEFR и регулярная статистика прогресса для родителей.",
+    images: ['/media/branding/logo-main.jpg'],
+  },
+  other: {
+    'geo.region': 'RU-MOW',
+    'geo.placename': 'Москва',
+    'geo.position': '55.871461;37.633069',
+    ICBM: '55.871461, 37.633069',
   },
 }
 
