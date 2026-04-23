@@ -1,0 +1,140 @@
+"use client"
+
+import Link from "next/link"
+import { ArrowRight, Users, Clock } from "lucide-react"
+import { Button } from "@/components/ui/button"
+import { brand } from "@/lib/brand"
+
+const programs = [
+  {
+    age: "Pre A1 / A1",
+    title: "Starters",
+    description: "Мягкий вход в язык: игровые задания, базовая лексика и первые короткие фразы.",
+    features: [
+      "Family and Friends Starter, 1, 2",
+      "Подготовка к экзамену Starters",
+      "Коммуникация через игру и движение",
+      "Фундамент для чтения и говорения"
+    ],
+    duration: brand.lessonDuration,
+    groupSize: "Мини-группа / пара / индивидуально",
+    color: "bg-accent/20"
+  },
+  {
+    age: "A1 / A2",
+    title: "Movers",
+    description: "Укрепляем базу и развиваем живую речь: ребёнок увереннее строит фразы и понимает задания.",
+    features: [
+      "Family and Friends Starter, 3, 4",
+      "Подготовка к экзамену Movers",
+      "Практика чтения и аудирования",
+      "Регулярная проверка прогресса"
+    ],
+    duration: brand.lessonDuration,
+    groupSize: "Мини-группа / пара / индивидуально",
+    color: "bg-primary/10"
+  },
+  {
+    age: "A2 / A2+",
+    title: "Flyers",
+    description: "Фокус на устойчивой разговорной и письменной речи с подготовкой к уровню A2+.",
+    features: [
+      "Family and Friends 5, 6",
+      "Подготовка к экзамену Flyers",
+      "Проектная работа и публичные мини-выступления",
+      "Уверенный переход к программам B1+"
+    ],
+    duration: brand.lessonDuration,
+    groupSize: "Мини-группа / пара / индивидуально",
+    color: "bg-secondary"
+  }
+]
+
+export function ProgramsSection() {
+  return (
+    <section id="programs" className="py-20 lg:py-32 bg-background">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="text-center max-w-3xl mx-auto mb-16">
+          <span className="text-sm font-medium text-accent uppercase tracking-wider">
+            Программы обучения
+          </span>
+          <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
+            Программы по уровням и международной системе CEFR
+          </h2>
+          <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
+            Сейчас мы работаем с young learners и ведём детей до A2/A2+.
+            Программы B1+ уже готовы и запускаются по мере роста текущих групп.
+          </p>
+        </div>
+
+        <div className="mb-10 flex flex-wrap items-center justify-center gap-3">
+          {["Очно", "Онлайн", "Индивидуально", "В паре", "Мини-группа"].map((format) => (
+            <span
+              key={format}
+              className="rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground"
+            >
+              {format}
+            </span>
+          ))}
+        </div>
+        
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {programs.map((program, index) => (
+            <div 
+              key={index}
+              className="relative bg-card rounded-3xl border border-border overflow-hidden hover:shadow-xl transition-all duration-300 group"
+            >
+              <div className={`${program.color} p-6 pb-8`}>
+                <span className="inline-block px-3 py-1 bg-card/80 rounded-full text-sm font-medium text-foreground mb-4">
+                  {program.age}
+                </span>
+                <h3 className="font-serif text-2xl font-semibold text-foreground">
+                  {program.title}
+                </h3>
+              </div>
+              
+              <div className="p-6 space-y-6">
+                <p className="text-muted-foreground leading-relaxed">
+                  {program.description}
+                </p>
+                
+                <ul className="space-y-3">
+                  {program.features.map((feature, featureIndex) => (
+                    <li key={featureIndex} className="flex items-start gap-3">
+                      <div className="w-1.5 h-1.5 rounded-full bg-accent mt-2 flex-shrink-0" />
+                      <span className="text-sm text-foreground">{feature}</span>
+                    </li>
+                  ))}
+                </ul>
+                
+                <div className="flex items-center gap-4 pt-4 border-t border-border">
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Clock className="w-4 h-4" />
+                    <span>{program.duration}</span>
+                  </div>
+                  <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                    <Users className="w-4 h-4" />
+                    <span>{program.groupSize}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+        
+        <div className="text-center mt-12">
+          <Button 
+            asChild 
+            size="lg"
+            className="bg-primary hover:bg-primary/90 text-primary-foreground"
+          >
+            <Link href="#contact">
+              Записаться на пробное занятие
+              <ArrowRight className="ml-2 w-5 h-5" />
+            </Link>
+          </Button>
+        </div>
+      </div>
+    </section>
+  )
+}

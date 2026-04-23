@@ -1,0 +1,110 @@
+[
+  {
+    "type": "catalog",
+    "slug": "food-flashcards",
+    "query": "kids food cards learning",
+    "title": "HealthierSchoolDay_infographic_FNS",
+    "image_url": "https://live.staticflickr.com/2835/9501904497_44650d931b_b.jpg",
+    "provider": "flickr",
+    "creator": "USDAgov",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/41284017@N08/9501904497"
+  },
+  {
+    "type": "catalog",
+    "slug": "board-game-adventure",
+    "query": "kids board game classroom",
+    "title": "The christmas special Arthur's Perfect Christmas MUST BE BANNED and never ever get revived in the future",
+    "image_url": "https://live.staticflickr.com/65535/52448838157_3dea4c9eb4_b.jpg",
+    "provider": "flickr",
+    "creator": "PatrickRich",
+    "license": "pdm",
+    "license_url": "https://creativecommons.org/publicdomain/mark/1.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/91689877@N03/52448838157"
+  },
+  {
+    "type": "catalog",
+    "slug": "coloring-alphabet",
+    "query": "alphabet coloring page child",
+    "title": "Silly Faces - SS 09 prima prova",
+    "image_url": "https://live.staticflickr.com/2516/4075694566_50c2cf6a44_m.jpg",
+    "provider": "flickr",
+    "creator": "the Italian voice",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/77476789@N00/4075694566"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-01",
+    "query": "children english class",
+    "title": "kindergarten, in session",
+    "image_url": "https://live.staticflickr.com/3178/2885861465_8b4101648a_b.jpg",
+    "provider": "flickr",
+    "creator": "woodleywonderworks",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/73645804@N00/2885861465"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-02",
+    "query": "child writing workbook",
+    "title": "Mbale teachers participate in the English language training workshop.",
+    "image_url": "https://live.staticflickr.com/8107/8576225595_78c14bc534_b.jpg",
+    "provider": "flickr",
+    "creator": "U.S. Mission Uganda",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/54621517@N08/8576225595"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-03",
+    "query": "kids reading books class",
+    "title": "First grade reading - small group breakout",
+    "image_url": "https://live.staticflickr.com/2477/4005631298_50241b41ab_b.jpg",
+    "provider": "flickr",
+    "creator": "woodleywonderworks",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/73645804@N00/4005631298"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-04",
+    "query": "teacher with children classroom",
+    "title": "'To learn and never be filled, is wisdom; to teach and never be weary, is love.' - Author Unknown",
+    "image_url": "https://live.staticflickr.com/5212/5455514338_606004fd04_b.jpg",
+    "provider": "flickr",
+    "creator": "Brian Metcalfe",
+    "license": "by-sa",
+    "license_url": "https://creativecommons.org/licenses/by-sa/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/54152770@N05/5455514338"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-05",
+    "query": "children educational game table",
+    "title": "Math Mania",
+    "image_url": "https://live.staticflickr.com/7145/6807903637_92ac1ed60e.jpg",
+    "provider": "flickr",
+    "creator": "University of the Fraser Valley",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/21187388@N06/6807903637"
+  },
+  {
+    "type": "gallery",
+    "slug": "gallery-06",
+    "query": "kids studying together",
+    "title": "Colours of Rural life (School Life in Tamilnadu)",
+    "image_url": "https://live.staticflickr.com/7890/47393681652_62344a9aba_b.jpg",
+    "provider": "flickr",
+    "creator": "Nithi clicks",
+    "license": "by",
+    "license_url": "https://creativecommons.org/licenses/by/2.0/",
+    "foreign_landing_url": "https://www.flickr.com/photos/47850033@N08/47393681652"
+  }
+]
