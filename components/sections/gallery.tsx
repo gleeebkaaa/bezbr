@@ -4,34 +4,55 @@ import Image from "next/image"
 
 const galleryImages = [
   {
-    src: "/media/gallery/IMG_1754.jpg",
+    src: "/media/gallery-optimized/board-practice.webp",
     title: "Работа у доски",
     description: "Наглядная практика помогает быстро включаться в английскую речь.",
   },
   {
-    src: "/media/gallery/IMG_1732.jpg",
+    src: "/media/gallery-optimized/mini-presentation.webp",
     title: "Мини-презентации",
     description: "Ребёнок учится уверенно выражать мысль на английском.",
   },
   {
-    src: "/media/gallery/IMG_1758_frame.jpg",
+    src: "/media/gallery-optimized/words-emotions.webp",
     title: "Практика слов и эмоций",
     description: "Через карточки ребёнок закрепляет лексику и коммуникативные навыки.",
   },
   {
-    src: "/media/gallery/IMG_3015_frame.jpg",
+    src: "/media/gallery-optimized/game-format.webp",
     title: "Игровой формат",
     description: "Удерживаем внимание и интерес ребёнка через движение и игру.",
   },
   {
-    src: "/media/gallery/IMG_3408_frame.jpg",
+    src: "/media/gallery-optimized/cards-work.webp",
     title: "Работа с карточками",
     description: "Каждое задание связано с разговорной практикой.",
   },
   {
-    src: "/media/gallery/IMG_3567_frame.jpg",
+    src: "/media/gallery-optimized/individual-pace.webp",
     title: "Индивидуальный темп",
     description: "Помогаем ребёнку говорить уверенно и без страха ошибки.",
+  },
+]
+
+const lessonVideos = [
+  {
+    src: "/media/video/presentation-lesson.mp4",
+    poster: "/media/video/presentation-lesson-poster.webp",
+    title: "Видео: мини-презентация на английском",
+    description: "Фрагмент занятия, где ребёнок выступает и отвечает на вопросы.",
+  },
+  {
+    src: "/media/video/game-lesson.mp4",
+    poster: "/media/video/game-lesson-poster.webp",
+    title: "Видео: игровой формат",
+    description: "Практика словаря через игровой сценарий и живую коммуникацию.",
+  },
+  {
+    src: "/media/video/materials-lesson.mp4",
+    poster: "/media/video/materials-lesson-poster.webp",
+    title: "Видео: работа с материалами",
+    description: "Рабочие листы и карточки в формате, который удерживает внимание ребёнка.",
   },
 ]
 
@@ -65,7 +86,8 @@ export function GallerySection() {
                   src={image.src}
                   alt={image.title}
                   width={900}
-                  height={1200}
+                  height={1600}
+                  sizes={index === 0 ? "(max-width: 768px) 50vw, 66vw" : "(max-width: 768px) 50vw, 33vw"}
                   className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-105"
                 />
               </div>
@@ -80,6 +102,41 @@ export function GallerySection() {
               </div>
             </article>
           ))}
+        </div>
+
+        <div className="mt-14 lg:mt-16">
+          <div className="mb-8 text-center">
+            <h3 className="font-serif text-2xl sm:text-3xl font-semibold text-foreground">
+              Видео с занятий
+            </h3>
+            <p className="mt-3 text-base text-muted-foreground">
+              Короткие фрагменты реальных уроков. Видео оптимизированы для быстрой загрузки.
+            </p>
+          </div>
+          <div className="grid gap-6 md:grid-cols-3">
+            {lessonVideos.map((video) => (
+              <article
+                key={video.src}
+                className="overflow-hidden rounded-3xl border border-border bg-background"
+              >
+                <video
+                  controls
+                  preload="none"
+                  playsInline
+                  poster={video.poster}
+                  className="aspect-[9/16] w-full object-cover bg-black"
+                >
+                  <source src={video.src} type="video/mp4" />
+                </video>
+                <div className="p-4">
+                  <h4 className="text-sm font-semibold text-foreground">{video.title}</h4>
+                  <p className="mt-2 text-sm text-muted-foreground leading-relaxed">
+                    {video.description}
+                  </p>
+                </div>
+              </article>
+            ))}
+          </div>
         </div>
       </div>
     </section>

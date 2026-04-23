@@ -281,7 +281,7 @@ export function getBestsellers(): Material[] {
   return materials.filter(m => m.bestseller)
 }
 
-const materialPlaceholder = "/media/branding/material-placeholder.jpg"
+const materialPlaceholder = "/media/branding/material-placeholder.webp"
 
 export function getMaterialCover(_material: Material): string {
   return materialPlaceholder
