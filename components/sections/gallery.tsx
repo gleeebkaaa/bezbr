@@ -4,34 +4,34 @@ import Image from "next/image"
 
 const galleryImages = [
   {
-    src: "/media/gallery-web/gallery-01.jpg",
-    title: "Живая вовлечённость на уроке",
-    description: "Дети включаются в работу через наглядные задачи и активный формат.",
+    src: "/media/gallery/IMG_1754.jpg",
+    title: "Работа у доски",
+    description: "Наглядная практика помогает быстро включаться в английскую речь.",
   },
   {
-    src: "/media/gallery-web/gallery-02.jpg",
-    title: "Практика речи и письма",
-    description: "На занятии сразу тренируем устную речь и фиксацию материала в тетради.",
+    src: "/media/gallery/IMG_1732.jpg",
+    title: "Мини-презентации",
+    description: "Ребёнок учится уверенно выражать мысль на английском.",
   },
   {
-    src: "/media/gallery-web/gallery-03.jpg",
-    title: "Обучение через игровые задания",
-    description: "Игра помогает ребёнку уверенно применять английский в коммуникации.",
+    src: "/media/gallery/IMG_1758_frame.jpg",
+    title: "Практика слов и эмоций",
+    description: "Через карточки ребёнок закрепляет лексику и коммуникативные навыки.",
   },
   {
-    src: "/media/gallery-web/gallery-04.jpg",
-    title: "Современные инструменты обучения",
-    description: "Комбинируем классическую методику, движение и интерактивные форматы.",
+    src: "/media/gallery/IMG_3015_frame.jpg",
+    title: "Игровой формат",
+    description: "Удерживаем внимание и интерес ребёнка через движение и игру.",
   },
   {
-    src: "/media/gallery-web/gallery-05.jpg",
-    title: "Настольные игры в учебном процессе",
-    description: "Через игру ребёнок легче запоминает лексику и грамматические конструкции.",
+    src: "/media/gallery/IMG_3408_frame.jpg",
+    title: "Работа с карточками",
+    description: "Каждое задание связано с разговорной практикой.",
   },
   {
-    src: "/media/gallery-web/gallery-06.jpg",
-    title: "Системная работа по уровням",
-    description: "Каждое занятие двигает ребёнка по понятной программе к следующему уровню.",
+    src: "/media/gallery/IMG_3567_frame.jpg",
+    title: "Индивидуальный темп",
+    description: "Помогаем ребёнку говорить уверенно и без страха ошибки.",
   },
 ]
 
@@ -44,11 +44,11 @@ export function GallerySection() {
             Пространство мастерской
           </span>
           <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Как проходит учебный процесс
+            Фото с занятий и рабочего процесса
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Визуально показываем формат занятий: коммуникация, практика и
-            работа с материалами в комфортной атмосфере.
+            Реальные кадры с занятий: как дети работают с материалами, говорят
+            и закрепляют английский в действии.
           </p>
         </div>
 

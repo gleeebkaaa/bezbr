@@ -4,7 +4,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { ArrowRight, ExternalLink, MapPin, CheckCircle2 } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { DustField } from "@/components/effects/dust-field"
 import { brand, heroHighlights, socialButtons } from "@/lib/brand"
 
 export function HeroSection() {
@@ -21,17 +20,9 @@ export function HeroSection() {
       </div>
       <div className="absolute inset-0 bg-[linear-gradient(120deg,_rgba(250,246,239,0.95)_0%,_rgba(250,246,239,0.86)_42%,_rgba(250,246,239,0.72)_100%)]" />
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_12%_14%,_rgba(214,91,69,0.16)_0%,_transparent_32%),radial-gradient(circle_at_84%_16%,_rgba(126,94,76,0.24)_0%,_transparent_30%),radial-gradient(circle_at_76%_78%,_rgba(207,149,116,0.16)_0%,_transparent_36%)]" />
-      <DustField />
 
       <div className="relative mx-auto grid min-h-[calc(100svh-4rem)] max-w-7xl gap-10 px-4 py-10 sm:px-6 lg:min-h-[calc(100svh-5rem)] lg:grid-cols-[1.08fr_0.92fr] lg:px-8 lg:py-16">
         <div className="z-10 flex max-w-2xl flex-col justify-center space-y-8">
-          <div className="inline-flex w-fit items-center gap-2 rounded-full border border-border/70 bg-background/70 px-4 py-2 shadow-sm backdrop-blur">
-            <span className="h-2 w-2 rounded-full bg-accent" />
-            <span className="text-sm font-medium text-foreground/80">
-              {brand.workshop}
-            </span>
-          </div>
-
           <div className="space-y-5">
             <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground/90">
               {brand.fullName}

@@ -281,21 +281,8 @@ export function getBestsellers(): Material[] {
   return materials.filter(m => m.bestseller)
 }
 
-const materialCoverMap: Record<string, string> = {
-  "animals-flashcards": "/media/catalog/animals-flashcards.jpg",
-  "food-flashcards": "/media/catalog/food-flashcards.jpg",
-  "colors-shapes-flashcards": "/media/catalog/colors-shapes-flashcards.jpg",
-  "bingo-animals": "/media/catalog/bingo-animals.jpg",
-  "memory-game-house": "/media/catalog/memory-game-house.jpg",
-  "board-game-adventure": "/media/catalog/board-game-adventure.jpg",
-  "alphabet-workbook": "/media/catalog/alphabet-workbook.jpg",
-  "first-words-workbook": "/media/catalog/first-words-workbook.jpg",
-  "grammar-basics-workbook": "/media/catalog/grammar-basics-workbook.jpg",
-  "coloring-alphabet": "/media/catalog/coloring-alphabet.jpg",
-  "tracing-letters": "/media/catalog/tracing-letters.jpg",
-  "activity-pack-seasons": "/media/catalog/activity-pack-seasons.jpg",
-}
+const materialPlaceholder = "/media/branding/material-placeholder.jpg"
 
-export function getMaterialCover(material: Material): string {
-  return materialCoverMap[material.slug] ?? "/media/catalog/animals-flashcards.jpg"
+export function getMaterialCover(_material: Material): string {
+  return materialPlaceholder
 }
