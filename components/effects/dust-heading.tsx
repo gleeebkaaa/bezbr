@@ -40,6 +40,7 @@ type PointerState = {
   vy: number
   speed: number
   t: number
+  inside: boolean
 }
 
 type CharBox = {
@@ -87,6 +88,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     vy: 0,
     speed: 0,
     t: 0,
+    inside: false,
   })
   const reducedMotionRef = useRef(false)
 
@@ -241,19 +243,23 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       charStateRef.current = nextCharStates
     }
 
-    const disturb = (clientX: number, clientY: number, intensity: number) => {
+    const disturb = (clientX: number, clientY: number, intensity: number, burst = false) => {
       const { left, top, width, height } = boundsRef.current
       const localX = clientX - left
       const localY = clientY - top
       if (localX < -56 || localY < -56 || localX > width + 56 || localY > height + 56) return
 
       const pointer = pointerRef.current
-      const radius = clamp(width * 0.14 + pointer.speed * 42, 86, 220)
+      const radius = clamp(width * 0.14 + pointer.speed * 42 + (burst ? 28 : 0), 86, 236)
       const radiusSq = radius * radius
-      const velocityBoost = 1 + clamp(pointer.speed * 1.05, 0, 2.6)
+      const velocityBoost = 1 + clamp(pointer.speed * 1.05, 0, 2.6) + (burst ? 0.35 : 0)
 
       const particles = particlesRef.current
       const charStates = charStateRef.current
+
+      const pointerLen = Math.hypot(pointer.vx, pointer.vy) || 1
+      const pvx = pointer.vx / pointerLen
+      const pvy = pointer.vy / pointerLen
 
       for (let index = 0; index < particles.length; index += 1) {
         const particle = particles[index]
@@ -270,16 +276,30 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const falloff = Math.pow((radius - dist) / radius, 1.65)
         const force = intensity * falloff * velocityBoost
         const swirl = force * 0.52 * (particle.charIndex % 2 === 0 ? 1 : -1)
+        const directional = clamp(nx * pvx + ny * pvy, -1, 1)
+        const trailBoost = 0.52 + directional * 0.34
 
-        particle.vx += nx * force * 2.2 + tx * swirl + pointer.vx * falloff * 0.2 + (Math.random() - 0.5) * 0.3
-        particle.vy += ny * force * 2.0 + ty * swirl + pointer.vy * falloff * 0.2 + (Math.random() - 0.5) * 0.3
+        particle.vx += nx * force * 2.2 + tx * swirl + pointer.vx * falloff * trailBoost + (Math.random() - 0.5) * 0.24
+        particle.vy += ny * force * 2.0 + ty * swirl + pointer.vy * falloff * trailBoost + (Math.random() - 0.5) * 0.24
 
         const charState = charStates[particle.charIndex]
         if (charState) {
-          charState.energy = clamp(charState.energy + force * 0.5, 0, 3.3)
-          charState.vx += nx * force * 0.42 + tx * swirl * 0.22
-          charState.vy += ny * force * 0.36 + ty * swirl * 0.22
+          charState.energy = clamp(charState.energy + force * 0.46, 0, 2.85)
+          charState.vx += nx * force * 0.4 + tx * swirl * 0.2 + pointer.vx * falloff * 0.08
+          charState.vy += ny * force * 0.34 + ty * swirl * 0.2 + pointer.vy * falloff * 0.08
         }
+      }
+    }
+
+    const onPointerEnter = (event: PointerEvent) => {
+      pointerRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+        vx: 0,
+        vy: 0,
+        speed: 0,
+        t: performance.now(),
+        inside: true,
       }
     }
 
@@ -299,13 +319,21 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         vy: dy / frameDt,
         speed,
         t: now,
+        inside: true,
       }
 
-      disturb(event.clientX, event.clientY, 1.9 + speed * 24)
+      disturb(event.clientX, event.clientY, 1.6 + speed * 20)
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      disturb(event.clientX, event.clientY, 4.1 + pointerRef.current.speed * 28)
+      disturb(event.clientX, event.clientY, 3.9 + pointerRef.current.speed * 24, true)
+    }
+
+    const onPointerLeave = () => {
+      pointerRef.current.inside = false
+      pointerRef.current.vx = 0
+      pointerRef.current.vy = 0
+      pointerRef.current.speed = 0
     }
 
     const animate = () => {
@@ -340,13 +368,19 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         if (visualEnergy < 0.1) continue
 
         const [red, green, blue] = DUST_COLORS[particle.colorIndex]
-        const alpha = clamp((visualEnergy - 0.1) * 0.24, 0.03, 0.85)
+        const alpha = clamp((visualEnergy - 0.1) * 0.24, 0.03, 0.8)
         const radius = particle.size * (1 + clamp(speed * 0.2 + displacement * 0.07, 0, 0.78))
+        const stretch = 1 + clamp(speed * 0.28, 0, 1.6)
+        const angle = Math.atan2(particle.vy, particle.vx)
 
+        context.save()
+        context.translate(particle.x, particle.y)
+        context.rotate(angle)
         context.fillStyle = `rgba(${red},${green},${blue},${alpha.toFixed(3)})`
         context.beginPath()
-        context.arc(particle.x, particle.y, radius, 0, Math.PI * 2)
+        context.ellipse(0, 0, radius * stretch, radius * (1 / stretch), 0, 0, Math.PI * 2)
         context.fill()
+        context.restore()
       }
 
       const charStates = charStateRef.current
@@ -355,24 +389,24 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const state = charStates[index]
         if (!node || !state) continue
 
-        state.vx += -state.offsetX * 0.22 + state.dirX * state.energy * 0.04
-        state.vy += -state.offsetY * 0.22 + state.dirY * state.energy * 0.04
-        state.vx *= 0.74
-        state.vy *= 0.74
-        state.offsetX = clamp(state.offsetX + state.vx, -28, 28)
-        state.offsetY = clamp(state.offsetY + state.vy, -18, 18)
-        state.energy *= 0.8
+        state.vx += -state.offsetX * 0.2 + state.dirX * state.energy * 0.035
+        state.vy += -state.offsetY * 0.2 + state.dirY * state.energy * 0.035
+        state.vx *= 0.76
+        state.vy *= 0.76
+        state.offsetX = clamp(state.offsetX + state.vx, -26, 26)
+        state.offsetY = clamp(state.offsetY + state.vy, -16, 16)
+        state.energy *= 0.82
 
         const travel = Math.hypot(state.offsetX, state.offsetY)
-        const opacity = clamp(1 - state.energy * 1.1 - travel * 0.02, 0.02, 1)
-        const rotate = clamp(state.offsetX * 0.7 + state.vx * 0.5, -11, 11)
+        const opacity = clamp(1 - state.energy * 0.7 - travel * 0.016, 0.16, 1)
+        const rotate = clamp(state.offsetX * 0.54 + state.vx * 0.4, -9, 9)
 
         node.style.opacity = opacity.toFixed(3)
         node.style.transform = `translate3d(${state.offsetX.toFixed(2)}px, ${state.offsetY.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg)`
       }
 
-      pointerRef.current.vx *= 0.9
-      pointerRef.current.vy *= 0.9
+      pointerRef.current.vx *= 0.86
+      pointerRef.current.vy *= 0.86
       frameRef.current = requestAnimationFrame(animate)
     }
 
@@ -381,7 +415,9 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     window.addEventListener("resize", resize)
 
     if (!reducedMotionRef.current) {
+      heading.addEventListener("pointerenter", onPointerEnter)
       heading.addEventListener("pointermove", onPointerMove)
+      heading.addEventListener("pointerleave", onPointerLeave)
       heading.addEventListener("pointerdown", onPointerDown)
     }
 
@@ -397,7 +433,9 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     return () => {
       resizeObserver.disconnect()
       window.removeEventListener("resize", resize)
+      heading.removeEventListener("pointerenter", onPointerEnter)
       heading.removeEventListener("pointermove", onPointerMove)
+      heading.removeEventListener("pointerleave", onPointerLeave)
       heading.removeEventListener("pointerdown", onPointerDown)
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current)
