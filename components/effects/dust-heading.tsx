@@ -56,6 +56,52 @@ type CharBox = {
 type DustHeadingProps = {
   text: string
   className?: string
+  preset?: "cinematic" | "aggressive"
+}
+
+type DustPresetConfig = {
+  maskDropChance: number
+  pointJitter: number
+  moveBaseIntensity: number
+  moveSpeedIntensity: number
+  downBaseIntensity: number
+  downSpeedIntensity: number
+  radiusScale: number
+  radiusSpeedScale: number
+  radiusBurstAdd: number
+  radiusMin: number
+  radiusMax: number
+  velocityBoostSpeed: number
+  velocityBoostMax: number
+  velocityBoostBurstAdd: number
+  forceScale: number
+  swirlScale: number
+  pointerTrailBase: number
+  pointerTrailDirectional: number
+  randomImpulse: number
+  charEnergyGain: number
+  charEnergyMax: number
+  charPushScale: number
+  particleSpring: number
+  particleDamping: number
+  particleVisualThreshold: number
+  particleAlphaScale: number
+  particleAlphaMax: number
+  particleStretchScale: number
+  particleStretchMax: number
+  charSpring: number
+  charDamping: number
+  charEnergyDrive: number
+  charEnergyDecay: number
+  charMaxOffsetX: number
+  charMaxOffsetY: number
+  charOpacityEnergy: number
+  charOpacityTravel: number
+  charOpacityMin: number
+  charRotateOffset: number
+  charRotateVelocity: number
+  charRotateMax: number
+  pointerDecay: number
 }
 
 const DUST_COLORS: [number, number, number][] = [
@@ -65,9 +111,100 @@ const DUST_COLORS: [number, number, number][] = [
   [160, 136, 120],
 ]
 
+const DUST_PRESETS: Record<"cinematic" | "aggressive", DustPresetConfig> = {
+  cinematic: {
+    maskDropChance: 0.14,
+    pointJitter: 0.55,
+    moveBaseIntensity: 1.6,
+    moveSpeedIntensity: 20,
+    downBaseIntensity: 3.9,
+    downSpeedIntensity: 24,
+    radiusScale: 0.14,
+    radiusSpeedScale: 42,
+    radiusBurstAdd: 28,
+    radiusMin: 86,
+    radiusMax: 236,
+    velocityBoostSpeed: 1.05,
+    velocityBoostMax: 2.6,
+    velocityBoostBurstAdd: 0.35,
+    forceScale: 1,
+    swirlScale: 0.52,
+    pointerTrailBase: 0.52,
+    pointerTrailDirectional: 0.34,
+    randomImpulse: 0.24,
+    charEnergyGain: 0.46,
+    charEnergyMax: 2.85,
+    charPushScale: 0.08,
+    particleSpring: 0.105,
+    particleDamping: 0.82,
+    particleVisualThreshold: 0.1,
+    particleAlphaScale: 0.24,
+    particleAlphaMax: 0.8,
+    particleStretchScale: 0.28,
+    particleStretchMax: 1.6,
+    charSpring: 0.2,
+    charDamping: 0.76,
+    charEnergyDrive: 0.035,
+    charEnergyDecay: 0.82,
+    charMaxOffsetX: 26,
+    charMaxOffsetY: 16,
+    charOpacityEnergy: 0.7,
+    charOpacityTravel: 0.016,
+    charOpacityMin: 0.16,
+    charRotateOffset: 0.54,
+    charRotateVelocity: 0.4,
+    charRotateMax: 9,
+    pointerDecay: 0.86,
+  },
+  aggressive: {
+    maskDropChance: 0.08,
+    pointJitter: 0.62,
+    moveBaseIntensity: 2.15,
+    moveSpeedIntensity: 28,
+    downBaseIntensity: 5.2,
+    downSpeedIntensity: 34,
+    radiusScale: 0.165,
+    radiusSpeedScale: 54,
+    radiusBurstAdd: 44,
+    radiusMin: 98,
+    radiusMax: 268,
+    velocityBoostSpeed: 1.2,
+    velocityBoostMax: 3.2,
+    velocityBoostBurstAdd: 0.65,
+    forceScale: 1.18,
+    swirlScale: 0.66,
+    pointerTrailBase: 0.64,
+    pointerTrailDirectional: 0.46,
+    randomImpulse: 0.32,
+    charEnergyGain: 0.62,
+    charEnergyMax: 3.8,
+    charPushScale: 0.14,
+    particleSpring: 0.088,
+    particleDamping: 0.79,
+    particleVisualThreshold: 0.08,
+    particleAlphaScale: 0.3,
+    particleAlphaMax: 0.92,
+    particleStretchScale: 0.38,
+    particleStretchMax: 2.2,
+    charSpring: 0.165,
+    charDamping: 0.79,
+    charEnergyDrive: 0.052,
+    charEnergyDecay: 0.85,
+    charMaxOffsetX: 36,
+    charMaxOffsetY: 22,
+    charOpacityEnergy: 0.84,
+    charOpacityTravel: 0.022,
+    charOpacityMin: 0.1,
+    charRotateOffset: 0.72,
+    charRotateVelocity: 0.52,
+    charRotateMax: 13,
+    pointerDecay: 0.88,
+  },
+}
+
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
 
-export function DustHeading({ text, className }: DustHeadingProps) {
+export function DustHeading({ text, className, preset = "cinematic" }: DustHeadingProps) {
   const headingRef = useRef<HTMLHeadingElement | null>(null)
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const frameRef = useRef<number | null>(null)
@@ -91,6 +228,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     inside: false,
   })
   const reducedMotionRef = useRef(false)
+  const config = DUST_PRESETS[preset]
 
   const words = text.split(" ")
   const charCount = words.reduce((total, word) => total + Array.from(word).length, 0)
@@ -200,11 +338,11 @@ export function DustHeading({ text, className }: DustHeadingProps) {
           for (let x = sx; x < ex; x += step) {
             const alpha = imageData[(y * maskWidth + x) * 4 + 3]
             if (alpha < 20) continue
-            if (Math.random() < 0.14) continue
+            if (Math.random() < config.maskDropChance) continue
 
             nextParticles.push({
-              x: x + (Math.random() - 0.5) * 0.55,
-              y: y + (Math.random() - 0.5) * 0.55,
+              x: x + (Math.random() - 0.5) * config.pointJitter,
+              y: y + (Math.random() - 0.5) * config.pointJitter,
               ox: x,
               oy: y,
               vx: 0,
@@ -250,9 +388,14 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       if (localX < -56 || localY < -56 || localX > width + 56 || localY > height + 56) return
 
       const pointer = pointerRef.current
-      const radius = clamp(width * 0.14 + pointer.speed * 42 + (burst ? 28 : 0), 86, 236)
+      const radius = clamp(
+        width * config.radiusScale + pointer.speed * config.radiusSpeedScale + (burst ? config.radiusBurstAdd : 0),
+        config.radiusMin,
+        config.radiusMax,
+      )
       const radiusSq = radius * radius
-      const velocityBoost = 1 + clamp(pointer.speed * 1.05, 0, 2.6) + (burst ? 0.35 : 0)
+      const velocityBoost =
+        1 + clamp(pointer.speed * config.velocityBoostSpeed, 0, config.velocityBoostMax) + (burst ? config.velocityBoostBurstAdd : 0)
 
       const particles = particlesRef.current
       const charStates = charStateRef.current
@@ -274,19 +417,21 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const tx = -ny
         const ty = nx
         const falloff = Math.pow((radius - dist) / radius, 1.65)
-        const force = intensity * falloff * velocityBoost
-        const swirl = force * 0.52 * (particle.charIndex % 2 === 0 ? 1 : -1)
+        const force = intensity * falloff * velocityBoost * config.forceScale
+        const swirl = force * config.swirlScale * (particle.charIndex % 2 === 0 ? 1 : -1)
         const directional = clamp(nx * pvx + ny * pvy, -1, 1)
-        const trailBoost = 0.52 + directional * 0.34
+        const trailBoost = config.pointerTrailBase + directional * config.pointerTrailDirectional
 
-        particle.vx += nx * force * 2.2 + tx * swirl + pointer.vx * falloff * trailBoost + (Math.random() - 0.5) * 0.24
-        particle.vy += ny * force * 2.0 + ty * swirl + pointer.vy * falloff * trailBoost + (Math.random() - 0.5) * 0.24
+        particle.vx +=
+          nx * force * 2.2 + tx * swirl + pointer.vx * falloff * trailBoost + (Math.random() - 0.5) * config.randomImpulse
+        particle.vy +=
+          ny * force * 2.0 + ty * swirl + pointer.vy * falloff * trailBoost + (Math.random() - 0.5) * config.randomImpulse
 
         const charState = charStates[particle.charIndex]
         if (charState) {
-          charState.energy = clamp(charState.energy + force * 0.46, 0, 2.85)
-          charState.vx += nx * force * 0.4 + tx * swirl * 0.2 + pointer.vx * falloff * 0.08
-          charState.vy += ny * force * 0.34 + ty * swirl * 0.2 + pointer.vy * falloff * 0.08
+          charState.energy = clamp(charState.energy + force * config.charEnergyGain, 0, config.charEnergyMax)
+          charState.vx += nx * force * 0.4 + tx * swirl * 0.2 + pointer.vx * falloff * config.charPushScale
+          charState.vy += ny * force * 0.34 + ty * swirl * 0.2 + pointer.vy * falloff * config.charPushScale
         }
       }
     }
@@ -322,11 +467,11 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         inside: true,
       }
 
-      disturb(event.clientX, event.clientY, 1.6 + speed * 20)
+      disturb(event.clientX, event.clientY, config.moveBaseIntensity + speed * config.moveSpeedIntensity)
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      disturb(event.clientX, event.clientY, 3.9 + pointerRef.current.speed * 24, true)
+      disturb(event.clientX, event.clientY, config.downBaseIntensity + pointerRef.current.speed * config.downSpeedIntensity, true)
     }
 
     const onPointerLeave = () => {
@@ -355,22 +500,22 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const pullX = particle.ox - particle.x
         const pullY = particle.oy - particle.y
 
-        particle.vx += pullX * 0.105
-        particle.vy += pullY * 0.105
-        particle.vx *= 0.82
-        particle.vy *= 0.82
+        particle.vx += pullX * config.particleSpring
+        particle.vy += pullY * config.particleSpring
+        particle.vx *= config.particleDamping
+        particle.vy *= config.particleDamping
         particle.x += particle.vx
         particle.y += particle.vy
 
         const speed = Math.hypot(particle.vx, particle.vy)
         const displacement = Math.hypot(particle.x - particle.ox, particle.y - particle.oy)
         const visualEnergy = speed * 2.0 + displacement * 1.12
-        if (visualEnergy < 0.1) continue
+        if (visualEnergy < config.particleVisualThreshold) continue
 
         const [red, green, blue] = DUST_COLORS[particle.colorIndex]
-        const alpha = clamp((visualEnergy - 0.1) * 0.24, 0.03, 0.8)
+        const alpha = clamp((visualEnergy - config.particleVisualThreshold) * config.particleAlphaScale, 0.03, config.particleAlphaMax)
         const radius = particle.size * (1 + clamp(speed * 0.2 + displacement * 0.07, 0, 0.78))
-        const stretch = 1 + clamp(speed * 0.28, 0, 1.6)
+        const stretch = 1 + clamp(speed * config.particleStretchScale, 0, config.particleStretchMax)
         const angle = Math.atan2(particle.vy, particle.vx)
 
         context.save()
@@ -389,24 +534,28 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const state = charStates[index]
         if (!node || !state) continue
 
-        state.vx += -state.offsetX * 0.2 + state.dirX * state.energy * 0.035
-        state.vy += -state.offsetY * 0.2 + state.dirY * state.energy * 0.035
-        state.vx *= 0.76
-        state.vy *= 0.76
-        state.offsetX = clamp(state.offsetX + state.vx, -26, 26)
-        state.offsetY = clamp(state.offsetY + state.vy, -16, 16)
-        state.energy *= 0.82
+        state.vx += -state.offsetX * config.charSpring + state.dirX * state.energy * config.charEnergyDrive
+        state.vy += -state.offsetY * config.charSpring + state.dirY * state.energy * config.charEnergyDrive
+        state.vx *= config.charDamping
+        state.vy *= config.charDamping
+        state.offsetX = clamp(state.offsetX + state.vx, -config.charMaxOffsetX, config.charMaxOffsetX)
+        state.offsetY = clamp(state.offsetY + state.vy, -config.charMaxOffsetY, config.charMaxOffsetY)
+        state.energy *= config.charEnergyDecay
 
         const travel = Math.hypot(state.offsetX, state.offsetY)
-        const opacity = clamp(1 - state.energy * 0.7 - travel * 0.016, 0.16, 1)
-        const rotate = clamp(state.offsetX * 0.54 + state.vx * 0.4, -9, 9)
+        const opacity = clamp(1 - state.energy * config.charOpacityEnergy - travel * config.charOpacityTravel, config.charOpacityMin, 1)
+        const rotate = clamp(
+          state.offsetX * config.charRotateOffset + state.vx * config.charRotateVelocity,
+          -config.charRotateMax,
+          config.charRotateMax,
+        )
 
         node.style.opacity = opacity.toFixed(3)
         node.style.transform = `translate3d(${state.offsetX.toFixed(2)}px, ${state.offsetY.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg)`
       }
 
-      pointerRef.current.vx *= 0.86
-      pointerRef.current.vy *= 0.86
+      pointerRef.current.vx *= config.pointerDecay
+      pointerRef.current.vy *= config.pointerDecay
       frameRef.current = requestAnimationFrame(animate)
     }
 
@@ -448,7 +597,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         node.style.transform = ""
       }
     }
-  }, [charCount, text])
+  }, [charCount, config, text])
 
   let cursor = 0
 

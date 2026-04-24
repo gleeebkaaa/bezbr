@@ -30,6 +30,7 @@ export function HeroSection() {
             </p>
             <DustHeading
               text="Английский, в котором ребёнок говорит свободно и уверенно"
+              preset="cinematic"
               className="font-serif text-4xl leading-[1.03] text-balance sm:text-5xl lg:text-6xl"
             />
             <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
