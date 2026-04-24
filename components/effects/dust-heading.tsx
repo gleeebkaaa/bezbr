@@ -15,6 +15,18 @@ type Particle = {
   charIndex: number
 }
 
+type CharState = {
+  cx: number
+  cy: number
+  x: number
+  y: number
+  vx: number
+  vy: number
+  sensitivity: number
+  returnForce: number
+  damping: number
+}
+
 type Bounds = {
   width: number
   height: number
@@ -26,15 +38,11 @@ type Bounds = {
 type PointerState = {
   x: number
   y: number
-  t: number
-  speed: number
-}
-
-type CharMotion = {
-  x: number
-  y: number
   vx: number
   vy: number
+  speed: number
+  t: number
+  inside: boolean
 }
 
 type DustHeadingProps = {
@@ -43,10 +51,10 @@ type DustHeadingProps = {
 }
 
 const DUST_COLORS: [number, number, number][] = [
-  [36, 32, 30],
-  [82, 71, 64],
-  [124, 105, 95],
-  [158, 133, 121],
+  [40, 35, 31],
+  [88, 74, 65],
+  [132, 109, 95],
+  [169, 142, 125],
 ]
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
@@ -57,8 +65,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
   const frameRef = useRef<number | null>(null)
   const charRefs = useRef<(HTMLSpanElement | null)[]>([])
   const particlesRef = useRef<Particle[]>([])
-  const charEnergyRef = useRef<number[]>([])
-  const charMotionRef = useRef<CharMotion[]>([])
+  const charStateRef = useRef<CharState[]>([])
   const boundsRef = useRef<Bounds>({
     width: 0,
     height: 0,
@@ -69,8 +76,11 @@ export function DustHeading({ text, className }: DustHeadingProps) {
   const pointerRef = useRef<PointerState>({
     x: 0,
     y: 0,
-    t: 0,
+    vx: 0,
+    vy: 0,
     speed: 0,
+    t: 0,
+    inside: false,
   })
   const reducedMotionRef = useRef(false)
   const words = text.split(" ")
@@ -99,16 +109,11 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       canvas.height = Math.max(1, Math.floor(rect.height * dpr))
       canvas.style.width = `${rect.width}px`
       canvas.style.height = `${rect.height}px`
-      particlesRef.current = []
-      charEnergyRef.current = new Array(charCount).fill(0)
-      charMotionRef.current = Array.from({ length: charCount }, () => ({
-        x: 0,
-        y: 0,
-        vx: 0,
-        vy: 0,
-      }))
 
+      const nextParticles: Particle[] = []
+      const nextChars: CharState[] = []
       const refs = charRefs.current.slice(0, charCount)
+
       refs.forEach((node, charIndex) => {
         if (!node) return
         const nodeRect = node.getBoundingClientRect()
@@ -118,98 +123,146 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const height = nodeRect.height
         if (width <= 0 || height <= 0) return
 
+        nextChars[charIndex] = {
+          cx: relX + width * 0.5,
+          cy: relY + height * 0.52,
+          x: 0,
+          y: 0,
+          vx: 0,
+          vy: 0,
+          sensitivity: 0.7 + Math.random() * 0.85,
+          returnForce: 0.036 + Math.random() * 0.032,
+          damping: 0.74 + Math.random() * 0.12,
+        }
+
         const area = width * height
-        const particleCount = clamp(Math.round(area / 78), 8, 24)
+        const particleCount = clamp(Math.round(area / 54), 12, 40)
 
         for (let index = 0; index < particleCount; index += 1) {
-          const spreadX = Math.random() * 0.78 + 0.11
-          const spreadY = Math.random() * 0.74 + 0.13
+          const spreadX = Math.random() * 0.8 + 0.1
+          const spreadY = Math.random() * 0.8 + 0.1
           const x = relX + width * spreadX
           const y = relY + height * spreadY
 
-          particlesRef.current.push({
+          nextParticles.push({
             x,
             y,
             ox: x,
             oy: y,
             vx: 0,
             vy: 0,
-            size: 0.45 + Math.random() * 1.6,
+            size: 0.45 + Math.random() * 1.9,
             colorIndex: Math.floor(Math.random() * DUST_COLORS.length),
             charIndex,
           })
         }
       })
+
+      particlesRef.current = nextParticles
+      charStateRef.current = nextChars
     }
 
-    const disturb = (clientX: number, clientY: number, baseIntensity: number, speed: number) => {
+    const disturb = (clientX: number, clientY: number, baseIntensity: number, burst = false) => {
       const { left, top, width, height } = boundsRef.current
       const localX = clientX - left
       const localY = clientY - top
+      if (localX < -64 || localY < -64 || localX > width + 64 || localY > height + 64) return
 
-      if (localX < -40 || localY < -40 || localX > width + 40 || localY > height + 40) return
+      const pointer = pointerRef.current
+      const velocityBoost = 1 + clamp(pointer.speed * 1.15, 0, 3.2)
+      const radius = clamp(width * 0.16 + pointer.speed * 56 + (burst ? 48 : 0), 92, 260)
+      const radiusSq = radius * radius
 
-      const radius = clamp(width * 0.11 + speed * 30, 70, 180)
-      const speedBoost = 1 + clamp(speed * 0.85, 0, 2.2)
+      const charStates = charStateRef.current
+      for (let index = 0; index < charStates.length; index += 1) {
+        const state = charStates[index]
+        if (!state) continue
+
+        const dx = state.cx + state.x - localX
+        const dy = state.cy + state.y - localY
+        const distSq = dx * dx + dy * dy
+        if (distSq > radiusSq || distSq < 0.05) continue
+
+        const dist = Math.sqrt(distSq)
+        const normalized = dist / radius
+        const personalFalloff = Math.pow(1 - normalized, 1.6 + (index % 7) * 0.08)
+        const force = baseIntensity * personalFalloff * state.sensitivity * velocityBoost
+        const invDist = 1 / dist
+        const nx = dx * invDist
+        const ny = dy * invDist
+        const swirlSign = index % 2 === 0 ? 1 : -1
+        const swirl = force * 0.34 * swirlSign
+        const transfer = 0.24 + (index % 5) * 0.05
+
+        state.vx += nx * force * 1.4 + -ny * swirl + pointer.vx * personalFalloff * transfer
+        state.vy += ny * force * 1.26 + nx * swirl + pointer.vy * personalFalloff * transfer
+      }
+
       const particles = particlesRef.current
-      const charEnergy = charEnergyRef.current
-      const charMotion = charMotionRef.current
-      const impulseX = new Array(charCount).fill(0)
-      const impulseY = new Array(charCount).fill(0)
-
       for (let index = 0; index < particles.length; index += 1) {
         const particle = particles[index]
         const dx = particle.x - localX
         const dy = particle.y - localY
-        const distance = Math.hypot(dx, dy) || 0.001
-        if (distance > radius) continue
+        const distSq = dx * dx + dy * dy
+        if (distSq > radiusSq || distSq < 0.08) continue
 
-        const nx = dx / distance
-        const ny = dy / distance
+        const dist = Math.sqrt(distSq)
+        const invDist = 1 / dist
+        const falloff = Math.pow((radius - dist) / radius, 1.65)
+        const force = baseIntensity * (burst ? 2.2 : 1.5) * falloff * velocityBoost
+        const nx = dx * invDist
+        const ny = dy * invDist
         const tx = -ny
         const ty = nx
-        const falloff = ((radius - distance) / radius) ** 1.8
-        const force = falloff * baseIntensity * speedBoost
-        const swirl = ((particle.charIndex % 2 === 0 ? 1 : -1) * force) / 1.4
+        const swirl = force * 0.46 * (particle.charIndex % 2 === 0 ? 1 : -1)
 
-        particle.vx += nx * force * 3 + tx * swirl + (Math.random() - 0.5) * 0.3
-        particle.vy += ny * force * 2.5 + ty * swirl - force * 0.26 + (Math.random() - 0.5) * 0.3
-
-        const ci = particle.charIndex
-        charEnergy[ci] = clamp(charEnergy[ci] + force * 0.07, 0, 1.25)
-        impulseX[ci] += nx * force * 0.17 + tx * swirl * 0.09
-        impulseY[ci] += ny * force * 0.15 + ty * swirl * 0.09 - force * 0.04
+        particle.vx += nx * force * 2.4 + tx * swirl + pointer.vx * falloff * 0.17 + (Math.random() - 0.5) * 0.35
+        particle.vy += ny * force * 2.1 + ty * swirl + pointer.vy * falloff * 0.17 + (Math.random() - 0.5) * 0.35
       }
+    }
 
-      for (let index = 0; index < charCount; index += 1) {
-        const motion = charMotion[index]
-        if (!motion) continue
-
-        motion.vx += clamp(impulseX[index], -1.35, 1.35)
-        motion.vy += clamp(impulseY[index], -1.1, 1.1)
+    const onPointerEnter = (event: PointerEvent) => {
+      pointerRef.current = {
+        x: event.clientX,
+        y: event.clientY,
+        vx: 0,
+        vy: 0,
+        speed: 0,
+        t: performance.now(),
+        inside: true,
       }
     }
 
     const onPointerMove = (event: PointerEvent) => {
       const now = performance.now()
       const previous = pointerRef.current
-      const dt = Math.max(12, now - previous.t)
+      const dt = Math.max(8, now - previous.t)
       const dx = event.clientX - previous.x
       const dy = event.clientY - previous.y
       const speed = Math.hypot(dx, dy) / dt
+      const normalizedDt = dt / 16.67
 
       pointerRef.current = {
         x: event.clientX,
         y: event.clientY,
-        t: now,
+        vx: dx / normalizedDt,
+        vy: dy / normalizedDt,
         speed,
+        t: now,
+        inside: true,
       }
 
-      disturb(event.clientX, event.clientY, 1.05, speed * 15)
+      disturb(event.clientX, event.clientY, 1.34 + speed * 18)
+    }
+
+    const onPointerLeave = () => {
+      pointerRef.current.inside = false
+      pointerRef.current.vx *= 0.5
+      pointerRef.current.vy *= 0.5
     }
 
     const onPointerDown = (event: PointerEvent) => {
-      disturb(event.clientX, event.clientY, 1.9, pointerRef.current.speed * 20 + 2.5)
+      disturb(event.clientX, event.clientY, 3.8 + pointerRef.current.speed * 30, true)
     }
 
     const animate = () => {
@@ -223,7 +276,6 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       context.setTransform(1, 0, 0, 1, 0, 0)
       context.clearRect(0, 0, canvas.width, canvas.height)
       context.setTransform(dpr, 0, 0, dpr, 0, 0)
-      context.globalCompositeOperation = "source-over"
 
       const particles = particlesRef.current
       for (let index = 0; index < particles.length; index += 1) {
@@ -231,8 +283,8 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         const pullX = particle.ox - particle.x
         const pullY = particle.oy - particle.y
 
-        particle.vx += pullX * 0.065
-        particle.vy += pullY * 0.065
+        particle.vx += pullX * 0.084
+        particle.vy += pullY * 0.084
         particle.vx *= 0.84
         particle.vy *= 0.84
         particle.x += particle.vx
@@ -240,12 +292,12 @@ export function DustHeading({ text, className }: DustHeadingProps) {
 
         const speed = Math.hypot(particle.vx, particle.vy)
         const displacement = Math.hypot(particle.x - particle.ox, particle.y - particle.oy)
-        const visualEnergy = speed * 2.1 + displacement * 0.9
-        if (visualEnergy < 0.09) continue
+        const visualEnergy = speed * 2.2 + displacement * 1.08
+        if (visualEnergy < 0.14) continue
 
         const [red, green, blue] = DUST_COLORS[particle.colorIndex]
-        const alpha = clamp((visualEnergy - 0.09) * 0.26, 0.02, 0.72)
-        const radius = particle.size * (1 + clamp(speed * 0.24 + displacement * 0.1, 0, 0.82))
+        const alpha = clamp((visualEnergy - 0.14) * 0.2, 0.02, 0.74)
+        const radius = particle.size * (1 + clamp(speed * 0.28 + displacement * 0.1, 0, 0.95))
 
         context.fillStyle = `rgba(${red},${green},${blue},${alpha.toFixed(3)})`
         context.beginPath()
@@ -253,33 +305,30 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         context.fill()
       }
 
-      const charEnergy = charEnergyRef.current
-      const charMotion = charMotionRef.current
+      const charStates = charStateRef.current
       for (let index = 0; index < charCount; index += 1) {
         const node = charRefs.current[index]
-        if (!node) continue
+        const state = charStates[index]
+        if (!node || !state) continue
 
-        const motion = charMotion[index]
-        if (motion) {
-          motion.vx += -motion.x * 0.19
-          motion.vy += -motion.y * 0.19
-          motion.vx *= 0.77
-          motion.vy *= 0.77
-          motion.x = clamp(motion.x + motion.vx, -11, 11)
-          motion.y = clamp(motion.y + motion.vy, -8, 8)
-        }
+        state.vx += -state.x * state.returnForce
+        state.vy += -state.y * state.returnForce
+        state.vx *= state.damping
+        state.vy *= state.damping
+        state.x = clamp(state.x + state.vx, -52, 52)
+        state.y = clamp(state.y + state.vy, -34, 34)
 
-        const energy = charEnergy[index] ?? 0
-        const mx = motion?.x ?? 0
-        const my = motion?.y ?? 0
-        const travel = Math.hypot(mx, my)
-        const opacity = clamp(1 - energy * 0.37 - travel * 0.022, 0.58, 1)
-        const rotate = clamp(mx * 0.45, -4.5, 4.5)
+        const travel = Math.hypot(state.x, state.y)
+        const rotate = clamp(state.x * 0.9 + state.vx * 0.38, -12, 12)
+        const scale = 1 + clamp(travel * 0.0035, 0, 0.12)
+        const opacity = clamp(1 - travel * 0.018, 0.4, 1)
+
         node.style.opacity = opacity.toFixed(3)
-        node.style.transform = `translate3d(${mx.toFixed(2)}px, ${(my - energy * 0.35).toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg)`
-        charEnergy[index] = energy * 0.82
+        node.style.transform = `translate3d(${state.x.toFixed(2)}px, ${state.y.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg) scale(${scale.toFixed(3)})`
       }
 
+      pointerRef.current.vx *= 0.9
+      pointerRef.current.vy *= 0.9
       frameRef.current = requestAnimationFrame(animate)
     }
 
@@ -288,7 +337,9 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     window.addEventListener("resize", resize)
 
     if (!reducedMotionRef.current) {
+      heading.addEventListener("pointerenter", onPointerEnter)
       heading.addEventListener("pointermove", onPointerMove)
+      heading.addEventListener("pointerleave", onPointerLeave)
       heading.addEventListener("pointerdown", onPointerDown)
     }
 
@@ -304,8 +355,11 @@ export function DustHeading({ text, className }: DustHeadingProps) {
     return () => {
       resizeObserver.disconnect()
       window.removeEventListener("resize", resize)
+      heading.removeEventListener("pointerenter", onPointerEnter)
       heading.removeEventListener("pointermove", onPointerMove)
+      heading.removeEventListener("pointerleave", onPointerLeave)
       heading.removeEventListener("pointerdown", onPointerDown)
+
       if (frameRef.current) {
         cancelAnimationFrame(frameRef.current)
       }
