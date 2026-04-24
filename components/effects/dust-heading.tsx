@@ -16,6 +16,8 @@ type Particle = {
 }
 
 type CharState = {
+  cx: number
+  cy: number
   energy: number
   offsetX: number
   offsetY: number
@@ -101,6 +103,9 @@ type DustPresetConfig = {
   charRotateOffset: number
   charRotateVelocity: number
   charRotateMax: number
+  letterSplitForce: number
+  letterSplitRandom: number
+  letterFadeBoost: number
   pointerDecay: number
 }
 
@@ -150,10 +155,13 @@ const DUST_PRESETS: Record<"cinematic" | "aggressive", DustPresetConfig> = {
     charMaxOffsetY: 16,
     charOpacityEnergy: 0.7,
     charOpacityTravel: 0.016,
-    charOpacityMin: 0.16,
+    charOpacityMin: 0.02,
     charRotateOffset: 0.54,
     charRotateVelocity: 0.4,
     charRotateMax: 9,
+    letterSplitForce: 0.44,
+    letterSplitRandom: 0.1,
+    letterFadeBoost: 1.18,
     pointerDecay: 0.86,
   },
   aggressive: {
@@ -194,10 +202,13 @@ const DUST_PRESETS: Record<"cinematic" | "aggressive", DustPresetConfig> = {
     charMaxOffsetY: 22,
     charOpacityEnergy: 0.84,
     charOpacityTravel: 0.022,
-    charOpacityMin: 0.1,
+    charOpacityMin: 0,
     charRotateOffset: 0.72,
     charRotateVelocity: 0.52,
     charRotateMax: 13,
+    letterSplitForce: 0.68,
+    letterSplitRandom: 0.14,
+    letterFadeBoost: 1.36,
     pointerDecay: 0.88,
   },
 }
@@ -303,6 +314,8 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
 
         const angle = Math.random() * Math.PI * 2
         nextCharStates[charIndex] = {
+          cx: relX + relW * 0.5,
+          cy: relY + relH * 0.5,
           energy: 0,
           offsetX: 0,
           offsetY: 0,
@@ -434,6 +447,26 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
           charState.vy += ny * force * 0.34 + ty * swirl * 0.2 + pointer.vy * falloff * config.charPushScale
         }
       }
+
+      for (let index = 0; index < charStates.length; index += 1) {
+        const state = charStates[index]
+        if (!state) continue
+
+        const dx = state.cx + state.offsetX - localX
+        const dy = state.cy + state.offsetY - localY
+        const distSq = dx * dx + dy * dy
+        if (distSq > radiusSq || distSq < 0.01) continue
+
+        const dist = Math.sqrt(distSq)
+        const nx = dx / dist
+        const ny = dy / dist
+        const falloff = Math.pow((radius - dist) / radius, 1.5)
+        const force = intensity * falloff * velocityBoost
+
+        state.energy = clamp(state.energy + force * (config.charEnergyGain * 0.95), 0, config.charEnergyMax)
+        state.vx += nx * force * 0.65 + pointer.vx * falloff * (config.charPushScale * 2.3)
+        state.vy += ny * force * 0.58 + pointer.vy * falloff * (config.charPushScale * 2.3)
+      }
     }
 
     const onPointerEnter = (event: PointerEvent) => {
@@ -495,8 +528,24 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
       context.globalCompositeOperation = "source-over"
 
       const particles = particlesRef.current
+      const charStates = charStateRef.current
+      const charDisplacement = new Array(charCount).fill(0)
+      const charVelocity = new Array(charCount).fill(0)
+      const charParticleCount = new Array(charCount).fill(0)
+
       for (let index = 0; index < particles.length; index += 1) {
         const particle = particles[index]
+        const charState = charStates[particle.charIndex]
+        if (charState && charState.energy > 0.01) {
+          const splitFactor = charState.energy / config.charEnergyMax
+          const splitForce = splitFactor * config.letterSplitForce
+          const swirlSign = particle.charIndex % 2 === 0 ? 1 : -1
+          particle.vx +=
+            charState.dirX * splitForce + swirlSign * charState.dirY * splitForce * 0.34 + (Math.random() - 0.5) * config.letterSplitRandom
+          particle.vy +=
+            charState.dirY * splitForce - swirlSign * charState.dirX * splitForce * 0.34 + (Math.random() - 0.5) * config.letterSplitRandom
+        }
+
         const pullX = particle.ox - particle.x
         const pullY = particle.oy - particle.y
 
@@ -509,6 +558,11 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
 
         const speed = Math.hypot(particle.vx, particle.vy)
         const displacement = Math.hypot(particle.x - particle.ox, particle.y - particle.oy)
+        const ci = particle.charIndex
+        charDisplacement[ci] += displacement
+        charVelocity[ci] += speed
+        charParticleCount[ci] += 1
+
         const visualEnergy = speed * 2.0 + displacement * 1.12
         if (visualEnergy < config.particleVisualThreshold) continue
 
@@ -528,7 +582,6 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
         context.restore()
       }
 
-      const charStates = charStateRef.current
       for (let index = 0; index < charCount; index += 1) {
         const node = charRefs.current[index]
         const state = charStates[index]
@@ -543,15 +596,28 @@ export function DustHeading({ text, className, preset = "cinematic" }: DustHeadi
         state.energy *= config.charEnergyDecay
 
         const travel = Math.hypot(state.offsetX, state.offsetY)
-        const opacity = clamp(1 - state.energy * config.charOpacityEnergy - travel * config.charOpacityTravel, config.charOpacityMin, 1)
+        const pCount = Math.max(1, charParticleCount[index])
+        const avgDisp = charDisplacement[index] / pCount
+        const avgVel = charVelocity[index] / pCount
+        const splitLevel = clamp(
+          (state.energy / config.charEnergyMax) * 0.82 + avgDisp * 0.052 + avgVel * 0.11,
+          0,
+          1,
+        )
+        const opacity = clamp(
+          1 - splitLevel * config.letterFadeBoost - travel * config.charOpacityTravel - state.energy * config.charOpacityEnergy * 0.35,
+          config.charOpacityMin,
+          1,
+        )
         const rotate = clamp(
           state.offsetX * config.charRotateOffset + state.vx * config.charRotateVelocity,
           -config.charRotateMax,
           config.charRotateMax,
         )
+        const scale = clamp(1 - splitLevel * 0.24, 0.72, 1)
 
         node.style.opacity = opacity.toFixed(3)
-        node.style.transform = `translate3d(${state.offsetX.toFixed(2)}px, ${state.offsetY.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg)`
+        node.style.transform = `translate3d(${state.offsetX.toFixed(2)}px, ${state.offsetY.toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg) scale(${scale.toFixed(3)})`
       }
 
       pointerRef.current.vx *= config.pointerDecay
