@@ -30,6 +30,13 @@ type PointerState = {
   speed: number
 }
 
+type CharMotion = {
+  x: number
+  y: number
+  vx: number
+  vy: number
+}
+
 type DustHeadingProps = {
   text: string
   className?: string
@@ -51,6 +58,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
   const charRefs = useRef<(HTMLSpanElement | null)[]>([])
   const particlesRef = useRef<Particle[]>([])
   const charEnergyRef = useRef<number[]>([])
+  const charMotionRef = useRef<CharMotion[]>([])
   const boundsRef = useRef<Bounds>({
     width: 0,
     height: 0,
@@ -93,6 +101,12 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       canvas.style.height = `${rect.height}px`
       particlesRef.current = []
       charEnergyRef.current = new Array(charCount).fill(0)
+      charMotionRef.current = Array.from({ length: charCount }, () => ({
+        x: 0,
+        y: 0,
+        vx: 0,
+        vy: 0,
+      }))
 
       const refs = charRefs.current.slice(0, charCount)
       refs.forEach((node, charIndex) => {
@@ -139,6 +153,9 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       const speedBoost = 1 + clamp(speed * 0.85, 0, 2.2)
       const particles = particlesRef.current
       const charEnergy = charEnergyRef.current
+      const charMotion = charMotionRef.current
+      const impulseX = new Array(charCount).fill(0)
+      const impulseY = new Array(charCount).fill(0)
 
       for (let index = 0; index < particles.length; index += 1) {
         const particle = particles[index]
@@ -158,7 +175,18 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         particle.vx += nx * force * 3 + tx * swirl + (Math.random() - 0.5) * 0.3
         particle.vy += ny * force * 2.5 + ty * swirl - force * 0.26 + (Math.random() - 0.5) * 0.3
 
-        charEnergy[particle.charIndex] = clamp(charEnergy[particle.charIndex] + force * 0.07, 0, 1.25)
+        const ci = particle.charIndex
+        charEnergy[ci] = clamp(charEnergy[ci] + force * 0.07, 0, 1.25)
+        impulseX[ci] += nx * force * 0.17 + tx * swirl * 0.09
+        impulseY[ci] += ny * force * 0.15 + ty * swirl * 0.09 - force * 0.04
+      }
+
+      for (let index = 0; index < charCount; index += 1) {
+        const motion = charMotion[index]
+        if (!motion) continue
+
+        motion.vx += clamp(impulseX[index], -1.35, 1.35)
+        motion.vy += clamp(impulseY[index], -1.1, 1.1)
       }
     }
 
@@ -226,14 +254,29 @@ export function DustHeading({ text, className }: DustHeadingProps) {
       }
 
       const charEnergy = charEnergyRef.current
+      const charMotion = charMotionRef.current
       for (let index = 0; index < charCount; index += 1) {
         const node = charRefs.current[index]
         if (!node) continue
 
+        const motion = charMotion[index]
+        if (motion) {
+          motion.vx += -motion.x * 0.19
+          motion.vy += -motion.y * 0.19
+          motion.vx *= 0.77
+          motion.vy *= 0.77
+          motion.x = clamp(motion.x + motion.vx, -11, 11)
+          motion.y = clamp(motion.y + motion.vy, -8, 8)
+        }
+
         const energy = charEnergy[index] ?? 0
-        const opacity = clamp(1 - energy * 0.62, 0.45, 1)
+        const mx = motion?.x ?? 0
+        const my = motion?.y ?? 0
+        const travel = Math.hypot(mx, my)
+        const opacity = clamp(1 - energy * 0.37 - travel * 0.022, 0.58, 1)
+        const rotate = clamp(mx * 0.45, -4.5, 4.5)
         node.style.opacity = opacity.toFixed(3)
-        node.style.transform = `translate3d(0, ${(-energy * 1.25).toFixed(2)}px, 0)`
+        node.style.transform = `translate3d(${mx.toFixed(2)}px, ${(my - energy * 0.35).toFixed(2)}px, 0) rotate(${rotate.toFixed(2)}deg)`
         charEnergy[index] = energy * 0.82
       }
 
