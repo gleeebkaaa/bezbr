@@ -36,10 +36,10 @@ type DustHeadingProps = {
 }
 
 const DUST_COLORS: [number, number, number][] = [
-  [32, 30, 28],
-  [66, 59, 53],
-  [124, 104, 91],
-  [168, 139, 121],
+  [36, 32, 30],
+  [82, 71, 64],
+  [124, 105, 95],
+  [158, 133, 121],
 ]
 
 const clamp = (value: number, min: number, max: number) => Math.max(min, Math.min(max, value))
@@ -105,7 +105,7 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         if (width <= 0 || height <= 0) return
 
         const area = width * height
-        const particleCount = clamp(Math.round(area / 55), 12, 42)
+        const particleCount = clamp(Math.round(area / 78), 8, 24)
 
         for (let index = 0; index < particleCount; index += 1) {
           const spreadX = Math.random() * 0.78 + 0.11
@@ -211,9 +211,13 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         particle.y += particle.vy
 
         const speed = Math.hypot(particle.vx, particle.vy)
+        const displacement = Math.hypot(particle.x - particle.ox, particle.y - particle.oy)
+        const visualEnergy = speed * 2.1 + displacement * 0.9
+        if (visualEnergy < 0.09) continue
+
         const [red, green, blue] = DUST_COLORS[particle.colorIndex]
-        const alpha = clamp(0.22 + speed * 0.2, 0.18, 0.88)
-        const radius = particle.size * (1 + clamp(speed * 0.2, 0, 0.7))
+        const alpha = clamp((visualEnergy - 0.09) * 0.26, 0.02, 0.72)
+        const radius = particle.size * (1 + clamp(speed * 0.24 + displacement * 0.1, 0, 0.82))
 
         context.fillStyle = `rgba(${red},${green},${blue},${alpha.toFixed(3)})`
         context.beginPath()
@@ -227,10 +231,10 @@ export function DustHeading({ text, className }: DustHeadingProps) {
         if (!node) continue
 
         const energy = charEnergy[index] ?? 0
-        const opacity = clamp(1 - energy * 0.78, 0.16, 1)
+        const opacity = clamp(1 - energy * 0.62, 0.45, 1)
         node.style.opacity = opacity.toFixed(3)
-        node.style.transform = `translate3d(0, ${(-energy * 1.8).toFixed(2)}px, 0)`
-        charEnergy[index] = energy * 0.88
+        node.style.transform = `translate3d(0, ${(-energy * 1.25).toFixed(2)}px, 0)`
+        charEnergy[index] = energy * 0.82
       }
 
       frameRef.current = requestAnimationFrame(animate)
