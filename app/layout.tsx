@@ -1,20 +1,8 @@
 import type { Metadata } from 'next'
-import { Cormorant_Garamond, Manrope } from 'next/font/google'
 import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { brand } from '@/lib/brand'
 import { site } from '@/lib/site'
-
-const cormorant = Cormorant_Garamond({ 
-  subsets: ["latin", "cyrillic"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-serif"
-});
-
-const manrope = Manrope({ 
-  subsets: ["latin", "cyrillic"],
-  variable: "--font-sans"
-});
 
 export const metadata: Metadata = {
   metadataBase: new URL(site.url),
@@ -84,7 +72,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ru">
-      <body className={`${manrope.variable} ${cormorant.variable} font-sans antialiased`}>
+      <body className="font-sans antialiased">
         {children}
         {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>

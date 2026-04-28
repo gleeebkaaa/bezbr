@@ -82,8 +82,8 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-sans), 'Manrope', system-ui, sans-serif;
-  --font-serif: var(--font-serif), 'Cormorant Garamond', Georgia, serif;
+  --font-sans: 'Manrope', 'Avenir Next', 'Segoe UI', system-ui, sans-serif;
+  --font-serif: 'Cormorant Garamond', 'Iowan Old Style', Georgia, serif;
   --font-mono: 'Geist Mono', 'Geist Mono Fallback';
   
   /* Brand colors for direct use */
