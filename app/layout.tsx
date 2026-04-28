@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Analytics } from '@vercel/analytics/next'
 import './globals.css'
 import { brand } from '@/lib/brand'
 import { site } from '@/lib/site'
@@ -74,7 +73,6 @@ export default function RootLayout({
     <html lang="ru">
       <body className="font-sans antialiased">
         {children}
-        {process.env.NODE_ENV === 'production' && <Analytics />}
       </body>
     </html>
   )
