@@ -141,7 +141,7 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   className="bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-8 text-base"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
-                  Купить
+                  Купить и получить PDF
                 </Button>
               </div>
               
@@ -151,9 +151,9 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   Получение материала
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  После оплаты вы получите PDF и чек на e-mail. Если нужен
-                  печатный комплект, доступен самовывоз из студии по
-                  согласованию с администратором.
+                  После оплаты PDF и чек приходят на e-mail. Если нужен
+                  печатный комплект, мы подготовим его и согласуем удобное
+                  время самовывоза из студии.
                 </p>
               </div>
             </div>

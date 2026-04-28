@@ -106,7 +106,7 @@ const lessonVideos = [
     src: "/media/video/lesson-focus.mp4",
     poster: "/media/video/lesson-focus-poster.jpg",
     title: "Видео: концентрация в уроке",
-    description: "Формат заданий помогает удерживать внимание без перегруза.",
+    description: "Задания меняются по ритму, поэтому ребёнку легче удерживать внимание.",
   },
   {
     src: "/media/video/lesson-warmup.mp4",

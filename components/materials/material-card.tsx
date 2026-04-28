@@ -85,7 +85,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
             variant="ghost"
             className="text-primary hover:text-primary hover:bg-accent/20"
           >
-            Подробнее
+            Купить и получить PDF
             <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         </div>

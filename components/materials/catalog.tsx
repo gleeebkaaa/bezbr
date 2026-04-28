@@ -32,12 +32,13 @@ export function MaterialsCatalog() {
             Каталог материалов
           </h1>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Карточки, игры, рабочие тетради и ворклисты в PDF. После оплаты
-            материал и чек автоматически приходят покупателю на e-mail.
+            Выбирайте готовые наборы карточек, игр, тетрадей и ворклистов в
+            PDF. После оплаты материал и чек приходят на e-mail, чтобы вы могли
+            распечатать файл и начать заниматься в тот же день.
           </p>
           <p className="mt-3 text-sm text-muted-foreground">
-            Для печатных комплектов доступен самовывоз из студии по
-            предварительному согласованию.
+            Если нужен печатный набор, мы подготовим его к самовывозу в удобное
+            для вас время.
           </p>
         </div>
         
@@ -102,7 +103,7 @@ export function MaterialsCatalog() {
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">1. Выберите</h3>
                 <p className="text-sm text-muted-foreground">
-                  Выберите материалы, подходящие возрасту вашего ребёнка
+                  Выберите набор под возраст ребёнка и тему, которую хотите закрепить
                 </p>
               </div>
               <div className="text-center">
@@ -114,7 +115,7 @@ export function MaterialsCatalog() {
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">2. Оплатите</h3>
                 <p className="text-sm text-muted-foreground">
-                  Оплата проходит через LeadPay. Подтверждение и чек формируются автоматически.
+                  Оплата проходит через LeadPay. Подтверждение и чек формируются автоматически
                 </p>
               </div>
               <div className="text-center">
@@ -123,7 +124,7 @@ export function MaterialsCatalog() {
                 </div>
                 <h3 className="font-semibold text-foreground mb-2">3. Получите материал</h3>
                 <p className="text-sm text-muted-foreground">
-                  PDF приходит на e-mail сразу после оплаты, а печатные наборы доступны для самовывоза.
+                  PDF приходит на e-mail сразу после оплаты, печатный набор можно забрать из студии
                 </p>
               </div>
             </div>

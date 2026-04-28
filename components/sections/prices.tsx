@@ -25,11 +25,11 @@ export function PricesSection() {
             Стоимость занятий
           </span>
           <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-            Понятная стоимость и удобный формат оплаты
+            Стоимость занятий без скрытых условий
           </h2>
           <p className="mt-6 text-lg text-muted-foreground leading-relaxed">
-            Можно оплачивать занятия разово или выбрать абонемент на месяц.
-            Вы заранее понимаете бюджет и формат.
+            Можно оплачивать каждое занятие отдельно или выбрать абонемент на
+            месяц. Формат и стоимость обсуждаем заранее, до старта обучения.
           </p>
         </div>
 
@@ -55,8 +55,8 @@ export function PricesSection() {
               ))}
             </ul>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-              Подходит, если вам важен гибкий график. Оплата вносится за
-              каждое проведённое занятие.
+              Подходит, если нужен гибкий график. Оплата вносится только за
+              проведённые занятия.
             </p>
           </article>
 
@@ -81,8 +81,8 @@ export function PricesSection() {
               ))}
             </ul>
             <p className="mt-5 text-sm leading-relaxed text-muted-foreground">
-              Единая стоимость на календарный месяц для выбранного формата
-              обучения.
+              Удобно, если ребёнок занимается регулярно и важно заранее
+              спланировать месяц.
             </p>
           </article>
         </div>
