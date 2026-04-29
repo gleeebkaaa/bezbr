@@ -76,20 +76,12 @@ export function AboutSection() {
             <div className="relative min-h-[440px] overflow-hidden rounded-[2rem] border border-border bg-background shadow-[0_24px_80px_rgba(48,39,33,0.12)]">
               <Image
                 src="/placeholder-user.jpg"
-                alt="Фото основателя центра"
+                alt="Основатель мастерской"
                 fill
                 sizes="(min-width: 1024px) 46vw, 100vw"
                 className="object-cover opacity-75 grayscale-[12%]"
               />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(28,25,22,0.02)_0%,_rgba(28,25,22,0.68)_100%)]" />
-              <div className="absolute inset-x-0 bottom-0 p-7 sm:p-8">
-                <p className="text-xs font-semibold uppercase tracking-[0.22em] text-white/72">
-                  Фото основателя центра
-                </p>
-                <p className="mt-3 max-w-md font-serif text-3xl leading-tight text-white">
-                  Здесь будет портрет, образование и личная история создателя мастерской.
-                </p>
-              </div>
+              <div className="absolute inset-0 bg-[linear-gradient(180deg,_rgba(28,25,22,0.02)_0%,_rgba(28,25,22,0.18)_100%)]" />
             </div>
 
             <div className="relative overflow-hidden rounded-[2rem] border border-border bg-background p-7 shadow-sm sm:p-8">
@@ -112,10 +104,6 @@ export function AboutSection() {
                 <p className="mt-3 font-serif text-2xl leading-snug text-foreground sm:text-3xl">
                   Дать ребёнку опыт, в котором английский становится способом
                   говорить, узнавать мир и чувствовать себя свободнее.
-                </p>
-                <p className="mt-5 text-base leading-relaxed text-muted-foreground">
-                  В этот блок добавим фото пространства или занятия и короткую
-                  историю о том, зачем появилась мастерская.
                 </p>
               </div>
             </div>

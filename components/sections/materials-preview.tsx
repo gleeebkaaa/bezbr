@@ -9,25 +9,25 @@ const materialCategories = [
     icon: BookOpen,
     title: "Карточки и флешкарты",
     count: "Готово к покупке",
-    description: "Наборы для запоминания слов через игру и разговор",
+    description: "Наборы для игр, первых фраз и запоминания слов",
   },
   {
     icon: Puzzle,
     title: "Настольные игры",
     count: "Готово к покупке",
-    description: "Готовые игры для занятий дома и мини-групп",
+    description: "Игры для живой практики английского дома и в мини-группе",
   },
   {
     icon: FileText,
     title: "Рабочие тетради",
     count: "Готово к покупке",
-    description: "Задания для закрепления лексики, чтения и грамматики",
+    description: "Пошаговые задания для чтения, письма и грамматики",
   },
   {
     icon: Download,
     title: "Ворклисты PDF",
     count: "50–70 позиций",
-    description: "PDF приходит на почту сразу после оплаты",
+    description: "Печатные задания для коротких домашних занятий",
   },
 ]
 
@@ -42,14 +42,14 @@ export function MaterialsPreviewSection() {
                 Материалы для дома
               </span>
               <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold text-foreground leading-tight text-balance">
-                Отдельный каталог материалов для покупки
+                Материалы, которые помогают заниматься дома с пользой
               </h2>
             </div>
 
             <p className="text-lg text-muted-foreground leading-relaxed">
               В каталоге собраны карточки, игры, рабочие тетради и ворклисты в
-              PDF. После оплаты материал и чек приходят на e-mail, а заниматься
-              можно сразу после распечатки.
+              PDF. Все наборы созданы преподавателями мастерской и проверены на
+              реальных занятиях с детьми.
             </p>
 
             <div className="rounded-2xl border border-accent/30 bg-accent/10 p-5">
@@ -57,8 +57,9 @@ export function MaterialsPreviewSection() {
                 Важно: доступен самовывоз из студии
               </p>
               <p className="mt-2 text-sm leading-relaxed text-muted-foreground">
-                Если нужен готовый печатный комплект, мы подготовим его и
-                согласуем удобное время самовывоза из мастерской.
+                После оплаты PDF приходит на e-mail. Если нужен готовый
+                печатный комплект, подготовим его и согласуем время самовывоза
+                из студии.
               </p>
             </div>
 

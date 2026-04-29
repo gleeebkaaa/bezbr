@@ -8,7 +8,6 @@ import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import {
   type Material,
-  categories,
   getMaterialsByCategory,
   getMaterialCover,
 } from "@/lib/materials-data"
@@ -19,9 +18,15 @@ type ProductDetailProps = {
   material: Material
 }
 
+const categoryEyebrows: Record<Material["category"], string> = {
+  flashcards: "Игровые карточки",
+  games: "Настольная игра",
+  workbooks: "PDF-тетрадь",
+  printables: "Печатный PDF-набор",
+}
+
 export function ProductDetail({ material }: ProductDetailProps) {
   const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
-  const category = categories.find(c => c.id === material.category)
   const cover = getMaterialCover(material)
   const relatedMaterials = getMaterialsByCategory(material.category)
     .filter(m => m.id !== material.id)
@@ -50,6 +55,7 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   alt={material.title}
                   width={1400}
                   height={1400}
+                  priority
                   className="h-full w-full object-cover"
                 />
                 <div className="absolute inset-0 bg-[linear-gradient(180deg,_transparent_45%,_rgba(12,15,22,0.5)_100%)]" />
@@ -73,7 +79,7 @@ export function ProductDetail({ material }: ProductDetailProps) {
             <div className="space-y-6">
               {/* Category */}
               <span className="text-sm font-medium text-accent uppercase tracking-wider">
-                {category?.label}
+                {categoryEyebrows[material.category]}
               </span>
               
               {/* Title */}
@@ -108,7 +114,7 @@ export function ProductDetail({ material }: ProductDetailProps) {
               {material.includes && (
                 <div className="space-y-4">
                   <h3 className="font-semibold text-lg text-foreground">
-                    Что входит в набор:
+                    Что внутри
                   </h3>
                   <ul className="space-y-3">
                     {material.includes.map((item, index) => (
@@ -141,19 +147,19 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   className="bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-8 text-base"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
-                  Купить и получить PDF
+                  Получить PDF
                 </Button>
               </div>
               
               {/* Delivery note */}
               <div className="bg-secondary/50 rounded-2xl p-6">
                 <h4 className="font-semibold text-foreground mb-2">
-                  Получение материала
+                  Как получаете материалы
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  После оплаты PDF и чек приходят на e-mail. Если нужен
-                  печатный комплект, мы подготовим его и согласуем удобное
-                  время самовывоза из студии.
+                  После оплаты {material.price} ₽ PDF-файл и чек приходят на
+                  вашу почту. Если нужен печатный вариант, подготовим комплект
+                  для самовывоза из студии в Москве.
                 </p>
               </div>
             </div>

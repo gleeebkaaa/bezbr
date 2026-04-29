@@ -193,7 +193,7 @@ export function CheckoutModal({ material, isOpen, onClose }: CheckoutModalProps)
               Подтверждение и переход к оплате
             </h2>
             <p className="text-muted-foreground mb-8">
-              Вы перейдёте на защищённую страницу LeadPay.
+              Проверьте данные. После оплаты PDF-файл и чек придут на указанную почту.
             </p>
 
             <div className="bg-secondary/50 rounded-2xl p-4 mb-6">

@@ -3,14 +3,20 @@ import Image from "next/image"
 import { Users, ArrowRight } from "lucide-react"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import { type Material, categories, getMaterialCover } from "@/lib/materials-data"
+import { type Material, getMaterialCover } from "@/lib/materials-data"
 
 type MaterialCardProps = {
   material: Material
 }
 
+const categoryEyebrows: Record<Material["category"], string> = {
+  flashcards: "Игровые карточки",
+  games: "Настольная игра",
+  workbooks: "PDF-тетрадь",
+  printables: "Печатный PDF-набор",
+}
+
 export function MaterialCard({ material }: MaterialCardProps) {
-  const category = categories.find(c => c.id === material.category)
   const cover = getMaterialCover(material)
   
   return (
@@ -46,7 +52,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
       <div className="p-5 space-y-4">
         {/* Category */}
         <span className="text-xs font-medium text-accent uppercase tracking-wider">
-          {category?.label}
+          {categoryEyebrows[material.category]}
         </span>
         
         {/* Title */}
@@ -85,7 +91,7 @@ export function MaterialCard({ material }: MaterialCardProps) {
             variant="ghost"
             className="text-primary hover:text-primary hover:bg-accent/20"
           >
-            Купить и получить PDF
+            Подробнее
             <ArrowRight className="w-4 h-4 ml-1" />
           </Button>
         </div>
