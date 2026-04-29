@@ -26,10 +26,10 @@ export function Footer() {
           <div className="col-span-2 md:col-span-1">
             <Link href="/" className="inline-block">
               <Image
-                src="/media/branding/logo-main-transparent.png"
+                src="/media/branding/logo-main-transparent-180.webp"
                 alt={brand.fullName}
-                width={240}
-                height={60}
+                width={180}
+                height={45}
                 className="h-10 w-auto"
               />
             </Link>

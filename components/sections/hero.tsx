@@ -42,6 +42,7 @@ export function HeroSection() {
           <span
             key={`${item.letter}-${item.x}`}
             className="floating-letter"
+            data-letter={item.letter}
             style={
               {
                 "--letter-x": item.x,
@@ -54,9 +55,7 @@ export function HeroSection() {
                 "--letter-delay": item.delay,
               } as CSSProperties
             }
-          >
-            {item.letter}
-          </span>
+          />
         ))}
       </div>
 

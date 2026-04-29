@@ -16,7 +16,7 @@
   --secondary-foreground: #33283a;
   --muted: #f7edf5;
   --muted-foreground: #6f6374;
-  --accent: #ed7fac;
+  --accent: #b84878;
   --accent-foreground: #fff8fb;
   --destructive: oklch(0.577 0.245 27.325);
   --destructive-foreground: oklch(0.577 0.245 27.325);
@@ -165,7 +165,6 @@
       radial-gradient(circle at 34% 72%, rgba(217, 200, 255, 0.62), transparent 34%),
       linear-gradient(130deg, #fff8fb 0%, #ffe9f6 26%, #f4edff 48%, #eafaff 70%, #fff7d2 100%);
     background-size: 170% 170%;
-    animation: brand-gradient-flow 18s ease-in-out infinite;
   }
 
   .hero-brand-field::before {
@@ -203,24 +202,17 @@
     user-select: none;
   }
 
+  .floating-letter::before {
+    content: attr(data-letter);
+    display: block;
+  }
+
   .floating-letter:nth-child(3n) {
     color: rgba(237, 127, 172, 0.24);
   }
 
   .floating-letter:nth-child(4n) {
     color: rgba(95, 82, 142, 0.18);
-  }
-}
-
-@keyframes brand-gradient-flow {
-  0%, 100% {
-    background-position: 0% 44%;
-  }
-  45% {
-    background-position: 100% 52%;
-  }
-  72% {
-    background-position: 48% 100%;
   }
 }
 
@@ -253,5 +245,11 @@
   .hero-brand-field::before,
   .floating-letter {
     animation: none;
+  }
+}
+
+@media (max-width: 639px) {
+  .floating-letter {
+    display: none;
   }
 }

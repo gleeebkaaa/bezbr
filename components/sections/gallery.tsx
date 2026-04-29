@@ -194,6 +194,12 @@ export function GallerySection() {
                   className="aspect-[9/16] w-full object-cover bg-black"
                 >
                   <source src={video.src} type="video/mp4" />
+                  <track
+                    kind="captions"
+                    src="/media/video/captions-ru.vtt"
+                    srcLang="ru"
+                    label="Русские субтитры"
+                  />
                 </video>
                 <div className="p-4">
                   <h4 className="text-sm font-semibold text-foreground">{video.title}</h4>

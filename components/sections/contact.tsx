@@ -42,7 +42,7 @@ export function ContactSection() {
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20">
           <div className="space-y-8">
             <div>
-              <span className="text-sm font-medium text-accent uppercase tracking-wider">
+              <span className="text-sm font-medium text-primary-foreground uppercase tracking-wider">
                 Запись и контакты
               </span>
               <h2 className="mt-4 font-serif text-3xl sm:text-4xl lg:text-5xl font-semibold leading-tight text-balance">

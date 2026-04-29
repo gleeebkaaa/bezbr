@@ -87,7 +87,7 @@ export function AboutSection() {
             <div className="relative overflow-hidden rounded-[2rem] border border-border bg-background p-7 shadow-sm sm:p-8">
               <div className="absolute inset-0 opacity-70">
                 <Image
-                  src="/media/branding/gradient-2.jpg"
+                  src="/media/branding/gradient-2-optimized.webp"
                   alt=""
                   fill
                   sizes="(min-width: 1024px) 46vw, 100vw"

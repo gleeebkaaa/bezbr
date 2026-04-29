@@ -27,10 +27,10 @@ export function Header() {
         <div className="flex items-center justify-between h-16 lg:h-20">
           <Link href="/" className="flex items-center gap-2">
             <Image
-              src="/media/branding/logo-main-transparent.png"
+              src="/media/branding/logo-main-transparent-180.webp"
               alt={brand.fullName}
-              width={230}
-              height={58}
+              width={180}
+              height={45}
               priority
               className="h-8 w-auto sm:h-9"
             />
