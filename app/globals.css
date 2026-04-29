@@ -1,5 +1,4 @@
 @import 'tailwindcss';
-@import 'tw-animate-css';
 
 @custom-variant dark (&:is(.dark *));
 
@@ -152,7 +151,6 @@
       linear-gradient(135deg, #fff8fb 0%, #fef7fb 52%, #fffaf0 100%);
     background-size: 120% 120%;
     background-position: center;
-    background-attachment: fixed;
   }
 }
 
@@ -256,6 +254,23 @@
 }
 
 @media (max-width: 639px) {
+  body {
+    background-size: 100% 100%;
+  }
+
+  .hero-brand-field {
+    background-size: 120% 120%;
+  }
+
+  .hero-brand-field::before {
+    display: none;
+  }
+
+  .hero-grain {
+    opacity: 0.08;
+    background-size: 13px 13px;
+  }
+
   .floating-letter {
     display: none;
   }
