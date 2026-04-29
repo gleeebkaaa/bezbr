@@ -114,7 +114,7 @@ export function ProductDetail({ material }: ProductDetailProps) {
               {material.includes && (
                 <div className="space-y-4">
                   <h3 className="font-semibold text-lg text-foreground">
-                    Что внутри
+                    {material.includesTitle ?? "Что внутри"}
                   </h3>
                   <ul className="space-y-3">
                     {material.includes.map((item, index) => (
@@ -157,11 +157,16 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   Как получаете материалы
                 </h4>
                 <p className="text-sm text-muted-foreground">
-                  После оплаты {material.price} ₽ PDF-файл и чек приходят на
-                  вашу почту. Если нужен печатный вариант, подготовим комплект
-                  для самовывоза из студии в Москве.
+                  {material.deliveryNote ??
+                    `После оплаты ${material.price} ₽ PDF-файл и чек приходят на вашу почту. Если нужен печатный вариант, подготовим комплект для самовывоза из студии в Москве.`}
                 </p>
               </div>
+
+              {material.closingNote && (
+                <p className="text-sm leading-relaxed text-muted-foreground">
+                  {material.closingNote}
+                </p>
+              )}
             </div>
           </div>
           
