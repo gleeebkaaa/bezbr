@@ -147,14 +147,14 @@ export function ProductDetail({ material }: ProductDetailProps) {
                   className="bg-primary hover:bg-primary/90 text-primary-foreground h-14 px-8 text-base"
                 >
                   <ShoppingCart className="w-5 h-5 mr-2" />
-                  Получить PDF
+                  {material.ctaLabel ?? "Получить PDF"}
                 </Button>
               </div>
               
               {/* Delivery note */}
               <div className="bg-secondary/50 rounded-2xl p-6">
                 <h4 className="font-semibold text-foreground mb-2">
-                  Как получаете материалы
+                  {material.deliveryTitle ?? "Как получаете материалы"}
                 </h4>
                 <p className="text-sm text-muted-foreground">
                   {material.deliveryNote ??
