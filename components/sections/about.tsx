@@ -1,5 +1,3 @@
-"use client"
-
 import Image from "next/image"
 import { Heart, MessageCircle, Sparkles, Shield, BarChart3, Brain, Quote } from "lucide-react"
 

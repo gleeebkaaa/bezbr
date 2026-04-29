@@ -5,7 +5,6 @@ import Link from "next/link"
 import Image from "next/image"
 import { Menu, MapPin } from "lucide-react"
 import { Button } from "@/components/ui/button"
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
 import { brand } from "@/lib/brand"
 
 const navLinks = [
@@ -58,15 +57,25 @@ export function Header() {
             </Button>
           </div>
 
-          <Sheet open={isOpen} onOpenChange={setIsOpen}>
-            <SheetTrigger asChild className="lg:hidden">
-              <Button variant="ghost" size="icon">
-                <Menu className="w-6 h-6" />
-                <span className="sr-only">Открыть меню</span>
-              </Button>
-            </SheetTrigger>
-            <SheetContent side="right" className="w-[300px] bg-background">
-              <div className="flex flex-col gap-6 mt-8">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="lg:hidden"
+            aria-expanded={isOpen}
+            aria-controls="mobile-menu"
+            onClick={() => setIsOpen((open) => !open)}
+          >
+            <Menu className="w-6 h-6" />
+            <span className="sr-only">Открыть меню</span>
+          </Button>
+        </div>
+
+        {isOpen && (
+          <div
+            id="mobile-menu"
+            className="lg:hidden border-t border-border bg-background py-5"
+          >
+            <div className="flex flex-col gap-6">
                 <nav className="flex flex-col gap-4">
                   {navLinks.map((link) => (
                     <Link
@@ -91,9 +100,8 @@ export function Header() {
                   </Button>
                 </div>
               </div>
-            </SheetContent>
-          </Sheet>
-        </div>
+          </div>
+        )}
       </div>
     </header>
   )

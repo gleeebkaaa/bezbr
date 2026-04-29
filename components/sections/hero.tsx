@@ -1,9 +1,7 @@
-"use client"
-
 import type { CSSProperties } from "react"
 import Link from "next/link"
 import { ArrowRight, ExternalLink, MapPin, CheckCircle2 } from "lucide-react"
-import { DustHeading } from "@/components/effects/dust-heading"
+import { DesktopDustHeading } from "@/components/effects/desktop-dust-heading"
 import { Button } from "@/components/ui/button"
 import { brand, heroHighlights, socialButtons } from "@/lib/brand"
 
@@ -65,11 +63,16 @@ export function HeroSection() {
             <p className="text-sm font-medium uppercase tracking-[0.24em] text-muted-foreground/90">
               {brand.fullName}
             </p>
-            <DustHeading
-              text="Английский, в котором ребёнок говорит свободно и уверенно"
-              preset="cinematic"
-              className="font-serif text-4xl leading-[1.03] text-balance sm:text-5xl lg:text-6xl"
-            />
+            <h1 className="font-serif text-4xl leading-[1.03] text-balance text-foreground md:hidden">
+              Английский, в котором ребёнок говорит свободно и уверенно
+            </h1>
+            <div className="hidden md:block">
+              <DesktopDustHeading
+                text="Английский, в котором ребёнок говорит свободно и уверенно"
+                preset="cinematic"
+                className="font-serif text-5xl leading-[1.03] text-balance lg:text-6xl"
+              />
+            </div>
             <p className="max-w-xl text-lg leading-relaxed text-muted-foreground">
               {brand.subtitle}
             </p>

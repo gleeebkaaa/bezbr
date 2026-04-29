@@ -1,12 +1,3 @@
-"use client"
-
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion"
-
 const faqs = [
   {
     question: "С какого возраста можно начинать занятия?",
@@ -61,23 +52,21 @@ export function FAQSection() {
           </p>
         </div>
         
-        {/* FAQ Accordion */}
-        <Accordion type="single" collapsible className="space-y-4">
+        <div className="space-y-4">
           {faqs.map((faq, index) => (
-            <AccordionItem 
+            <details
               key={index} 
-              value={`item-${index}`}
-              className="bg-card border border-border rounded-2xl px-6 data-[state=open]:shadow-md transition-all"
+              className="group bg-card border border-border rounded-2xl px-6 open:shadow-md transition-all"
             >
-              <AccordionTrigger className="text-left font-semibold text-foreground hover:no-underline py-6">
+              <summary className="cursor-pointer list-none py-6 text-left font-semibold text-foreground marker:hidden [&::-webkit-details-marker]:hidden">
                 {faq.question}
-              </AccordionTrigger>
-              <AccordionContent className="text-muted-foreground leading-relaxed pb-6">
+              </summary>
+              <p className="text-muted-foreground leading-relaxed pb-6">
                 {faq.answer}
-              </AccordionContent>
-            </AccordionItem>
+              </p>
+            </details>
           ))}
-        </Accordion>
+        </div>
       </div>
     </section>
   )

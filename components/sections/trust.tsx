@@ -1,5 +1,3 @@
-"use client"
-
 import { Check, MapPin, Award, Users, TrendingUp, Heart } from "lucide-react"
 
 const advantages = [

@@ -156,6 +156,13 @@
   }
 }
 
+@supports (content-visibility: auto) {
+  main > section:not(:first-child):not(#contact) {
+    content-visibility: auto;
+    contain-intrinsic-size: auto 900px;
+  }
+}
+
 @layer utilities {
   .hero-brand-field {
     background:
