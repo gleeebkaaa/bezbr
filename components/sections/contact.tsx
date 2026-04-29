@@ -1,14 +1,9 @@
-"use client"
-
-import { useState } from "react"
-import type { FormEvent } from "react"
 import Link from "next/link"
 import {
   Clock,
   ExternalLink,
   MapPin,
   Phone,
-  Send,
   Mail,
 } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -17,25 +12,6 @@ import { Textarea } from "@/components/ui/textarea"
 import { brand, socialButtons } from "@/lib/brand"
 
 export function ContactSection() {
-  const [formState, setFormState] = useState({
-    parentName: "",
-    childName: "",
-    childAge: "",
-    phone: "",
-    email: "",
-    message: "",
-  })
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [isSubmitted, setIsSubmitted] = useState(false)
-
-  const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault()
-    setIsSubmitting(true)
-    await new Promise((resolve) => setTimeout(resolve, 1000))
-    setIsSubmitting(false)
-    setIsSubmitted(true)
-  }
-
   return (
     <section id="contact" className="py-20 lg:py-32 bg-primary text-primary-foreground">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -140,30 +116,20 @@ export function ContactSection() {
               Достаточно заполнить данные ниже, и мы свяжемся с вами.
             </p>
 
-            {isSubmitted ? (
-              <div className="text-center py-12">
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full bg-accent/20 flex items-center justify-center">
-                  <Send className="w-8 h-8 text-primary" />
-                </div>
-                <h4 className="font-serif text-xl font-semibold text-foreground mb-2">
-                  Заявка отправлена
-                </h4>
-                <p className="text-muted-foreground">
-                  Мы свяжемся с вами в ближайшее время и согласуем пробное занятие.
-                </p>
-              </div>
-            ) : (
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form
+                action="/#contact"
+                method="get"
+                className="space-y-5"
+              >
                 <div className="space-y-2">
                   <label htmlFor="parentName" className="text-sm font-medium text-foreground">
                     ФИО родителя
                   </label>
                   <Input
                     id="parentName"
+                    name="ФИО родителя"
                     type="text"
                     placeholder="Имя и фамилия"
-                    value={formState.parentName}
-                    onChange={(e) => setFormState({ ...formState, parentName: e.target.value })}
                     required
                     className="h-12 bg-background border-border"
                   />
@@ -175,10 +141,9 @@ export function ContactSection() {
                   </label>
                   <Input
                     id="childName"
+                    name="ФИО ученика"
                     type="text"
                     placeholder="Имя и фамилия ребёнка"
-                    value={formState.childName}
-                    onChange={(e) => setFormState({ ...formState, childName: e.target.value })}
                     required
                     className="h-12 bg-background border-border"
                   />
@@ -191,10 +156,9 @@ export function ContactSection() {
                     </label>
                     <Input
                       id="childAge"
+                      name="Возраст ученика"
                       type="text"
                       placeholder="Например, 7"
-                      value={formState.childAge}
-                      onChange={(e) => setFormState({ ...formState, childAge: e.target.value })}
                       required
                       className="h-12 bg-background border-border"
                     />
@@ -206,10 +170,9 @@ export function ContactSection() {
                     </label>
                     <Input
                       id="phone"
+                      name="Номер для связи"
                       type="tel"
                       placeholder="+7 (___) ___-__-__"
-                      value={formState.phone}
-                      onChange={(e) => setFormState({ ...formState, phone: e.target.value })}
                       required
                       className="h-12 bg-background border-border"
                     />
@@ -224,10 +187,9 @@ export function ContactSection() {
                     <Mail className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
                     <Input
                       id="email"
+                      name="Email"
                       type="email"
                       placeholder="name@email.com"
-                      value={formState.email}
-                      onChange={(e) => setFormState({ ...formState, email: e.target.value })}
                       className="h-12 bg-background border-border pl-9"
                     />
                   </div>
@@ -239,9 +201,8 @@ export function ContactSection() {
                   </label>
                   <Textarea
                     id="message"
+                    name="Комментарий"
                     placeholder="Например: удобные дни, формат онлайн/очно, цель занятий"
-                    value={formState.message}
-                    onChange={(e) => setFormState({ ...formState, message: e.target.value })}
                     className="min-h-24 bg-background border-border resize-none"
                   />
                 </div>
@@ -249,11 +210,17 @@ export function ContactSection() {
                 <Button
                   type="submit"
                   size="lg"
-                  disabled={isSubmitting}
                   className="w-full h-14 bg-primary hover:bg-primary/90 text-primary-foreground text-base"
                 >
-                  {isSubmitting ? "Отправляем..." : "Записаться на пробное занятие"}
+                  Записаться на пробное занятие
                 </Button>
+
+                <a
+                  href={brand.phoneHref}
+                  className="flex h-12 items-center justify-center rounded-md border border-border text-sm font-medium text-foreground transition-colors hover:bg-secondary"
+                >
+                  Или позвонить: {brand.phone}
+                </a>
 
                 <p className="text-xs text-muted-foreground text-center">
                   Нажимая кнопку, вы соглашаетесь с{" "}
@@ -262,7 +229,6 @@ export function ContactSection() {
                   </Link>
                 </p>
               </form>
-            )}
           </div>
         </div>
       </div>
